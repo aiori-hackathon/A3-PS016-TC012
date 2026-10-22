@@ -1,0 +1,2 @@
+imsi,flow_id,direction,packet_interval_s
+1,dl1,DL,0.1

@@ -1,0 +1,2 @@
+run_id,policy,split,scenario_id,config_id,pair_id,seed,rng_run,speed_kmh,ns3_version,radio_model,git_commit,observation_start_s,observation_end_s,synthetic
+SYNTHETIC_a3,a3,test,demo,demo-config,demo-pair,1,1,30,fixture-only,SYNTHETIC,fixture-only,0,5,true
