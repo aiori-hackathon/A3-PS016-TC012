@@ -714,7 +714,7 @@ main(int argc, char* argv[])
 
     // Preserve existing mobility logging
     Simulator::Schedule(
-        Seconds(0.2),
+        Seconds(0.0),
         &LogMobility,
         ueNodes.Get(i),
         imsi,
