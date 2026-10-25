@@ -1,0 +1,13 @@
+{
+  "protocol_id": "paired-action-v1-draft",
+  "status": "draft",
+  "description": "Proposed experimental convention; settle with Joe before real action rollouts.",
+  "horizon_s": 1.0,
+  "action_hold_s": 0.2,
+  "followup_policy_id": "shared-rule-v1",
+  "ping_pong_window_s": 1.0,
+  "max_feature_age_s": 0.2,
+  "gap_margin_s": 0.005,
+  "throughput_margin_mbps": 0.01,
+  "priority": ["service_failures", "ping_pong_events", "total_excess_gap_s", "throughput_mbps"]
+}

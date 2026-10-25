@@ -56,6 +56,11 @@ the agreed offline action/outcome criterion and actual simulator data. Copying
 A3 actions or assigning fabricated outcome labels is not implemented. Reserve
 whole independent runs/scenarios; never randomly split adjacent feature rows.
 
+The separate optional ML workflow is documented in docs/ML_PIPELINE.md. It prepares
+labels from matched stay/handover outcomes, trains one RF, and exports portable
+JSON inference. It includes synthetic software fixtures; it does not create real
+labels or train on the four supplied A3 validation runs.
+
 ## Metric definitions and limits
 
 - Window: application receptions in [observation_start_s, observation_end_s).
