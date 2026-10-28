@@ -61,6 +61,10 @@ labels from matched stay/handover outcomes, trains one RF, and exports portable
 JSON inference. It includes synthetic software fixtures; it does not create real
 labels or train on the four supplied A3 validation runs.
 
+For paired-action pilot archives, use the importer and automated checks in
+docs/PILOT_INTAKE.md before the ML label stage. Unknown outcomes remain blank,
+and incomplete inputs are explicitly marked pending.
+
 ## Metric definitions and limits
 
 - Window: application receptions in [observation_start_s, observation_end_s).

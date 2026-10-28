@@ -5,6 +5,73 @@ generate real alternative-action outcomes, or establish a network improvement.
 The four supplied A3 runs remain validation/integration data. Their observed
 handover success does not provide a label for the unobserved alternative action.
 
+For Joe's paired pilot ZIPs, start with the read-only importer and audit in
+[PILOT_INTAKE.md](PILOT_INTAKE.md). It maps the actual exports to staging CSVs,
+preserves unknown failures and reports duplicate features and split risks. A
+successful file audit does not make exploratory outcomes ready for labels.
+
+## Deadline pilot dataset with a narrower objective
+
+The separate `aiori_pipeline.packet_labels` command can generate observed
+packet-performance preferences without guessing service failures. It uses
+configs/packet_label_protocol.json: lower total reception gap wins beyond 5 ms;
+otherwise throughput breaks a tie beyond 0.01 Mbps; remaining ties/incomplete
+observations have label=-1 and are excluded from fitting. The objective was
+selected after viewing the pilots and is explicitly exploratory. It does not
+replace or freeze the service-failure-first experimental protocol below.
+
+```powershell
+.venv/Scripts/python.exe -m aiori_pipeline.packet_labels "C:/Users/Debayan/Downloads/paired_pilot_v1.zip" "C:/Users/Debayan/Downloads/low_margin_pilot_v2.zip" --output output/packet-training-v1
+```
+
+Each archive is audited again. Labels from pairs with verified archived source
+form training.csv; other audited labels remain in supplemental.csv. Unknown
+service_failures stay blank. All related pilots belong to one conservative
+training family; validation/test sets are unavailable. training_X.csv contains
+the exact seven predictors, with aligned targets/decision IDs/weights in
+training_y.csv. Each repeated feature vector has total training weight one;
+class counts and conflicting outcomes are retained without fabrication.
+
+The output includes a protocol, per-archive audits, source/output hashes, a
+dataset report and training_dataset.zip. It is suitable for exploratory fitting
+or integration work, not a held-out performance claim. The existing validated
+RF trainer deliberately retains its stricter objective and group requirements;
+this separate narrower dataset does not bypass those guards.
+
+### Explicit integration-only RF prototype
+
+The first real-data export is preserved in
+[models/rf-prototype-v1](../models/rf-prototype-v1/JOE_INTEGRATION.md), including
+the exact model, preprocessing, golden predictions and integration instructions.
+
+When an unvalidated simulator-integration artifact is needed, use the separately
+named prototype trainer. It fits all eligible primary packet-preference rows,
+checks their hashes and retains the existing validated trainer's safeguards.
+
+```powershell
+.venv/Scripts/python.exe -m aiori_pipeline.prototype output/packet-training-v1 --output output/rf-prototype-v1
+```
+
+The fixed settings are 128 trees, depth 8, minimum leaf size 2, balanced_subsample
+class weights, seed 42 and threshold 0.6. Supplied per-feature-vector weights are
+also applied. No hyperparameter/threshold search, random row split, OOB estimate
+or validation score is produced. Training-only resubstitution metrics remain
+explicitly separate from unavailable validation/test metrics.
+
+Exports include model.json, preprocessing.json, golden_predictions.json,
+training_report.json, rf_prototype.hpp, rf_parity_check.cpp, JOE_INTEGRATION.md,
+checksums and rf_prototype_v1.zip. The header is a standalone C++17 evaluator
+without Python/runtime dependencies. JSON predictions are checked against
+scikit-learn, including missing-trend imputation. A C++ compiler was unavailable
+locally; Joe must compile/run the included standalone checker before integration.
+
+Unknown service failures remain outside this explicitly limited objective. The
+model is marked integration_prototype_unvalidated. Its RF score is uncalibrated;
+neither training metrics nor successful export demonstrates a better live policy.
+Invalid required features produce no prediction, rather than an automatic STAY
+or HANDOVER. Simulator state, candidate selection, measurement freshness,
+cooldown and final handover triggering remain Joe's implementation responsibilities.
+
 ## Environment and a working synthetic example
 
 Python 3.10+. The baseline processing CLI and label preparation need only the

@@ -1,0 +1,3367 @@
+{
+  "schema_version": 1,
+  "model_id": "rf-prototype-packet-v1-d2a723f8b90e",
+  "model_status": "integration_prototype_unvalidated",
+  "label_scope": "observed_packet_performance_only",
+  "features": [
+    "serving_rsrp_dbm",
+    "candidate_rsrp_dbm",
+    "rsrp_delta_db",
+    "delta_slope_db_per_s",
+    "trend_available",
+    "speed_mps",
+    "mobility_age_s"
+  ],
+  "classes": [
+    "stay",
+    "handover"
+  ],
+  "medians": [
+    -74.2938295,
+    -73.1468175,
+    1.1470120000000001,
+    3.628587,
+    1.0,
+    20.833333000000003,
+    0.1
+  ],
+  "threshold": 0.6,
+  "synthetic": false,
+  "protocol": {
+    "schema_version": 1,
+    "protocol_id": "observed-packet-preference-v1",
+    "status": "fixed_offline_label_definition",
+    "objective": "observed_packet_performance",
+    "priority": [
+      "total_excess_gap_s",
+      "throughput_mbps"
+    ],
+    "horizon_s": 1.0,
+    "action_hold_s": 0.2,
+    "gap_margin_s": 0.005,
+    "throughput_margin_mbps": 0.01,
+    "service_failure_treatment": "excluded_from_this_objective; unknown_values_preserved",
+    "simulator_followup_status": "as_run; not jointly frozen",
+    "design_timing": "exploratory definition selected after inspecting pilot results",
+    "label_definitions": {
+      "0": "STAY has better observed packet performance",
+      "1": "HANDOVER has better observed packet performance",
+      "-1": "tie or incomplete observation; exclude from fitting"
+    },
+    "training_source_requirement": "archived simulator source SHA256 verified by intake",
+    "limitations": [
+      "This is a separate, narrower objective than the draft service-failure-first protocol.",
+      "A packet preference is not evidence of better connectivity, radio outage or end-to-end loss.",
+      "Labels reflect realized paired outcomes, not an expectation over channel/RNG conditions.",
+      "Repeated/conflicting inputs must remain together; no random row split.",
+      "No independent validation/test evidence is currently available."
+    ]
+  },
+  "trees": [
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.16666666666666669,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.16666666666666669,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -73.14681625366211,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.13333333333333336,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.28571428571428575,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.125,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.2105263157894737
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        3.6285868883132935,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.06666666666666667,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.0625,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.11764705882352941,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        5,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        20.833332538604736,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        1.0,
+        1.0,
+        0.11764705882352941
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.2631578947368421,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.16666666666666669,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.16666666666666669,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        5,
+        -2,
+        -2
+      ],
+      "threshold": [
+        20.833332538604736,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.28571428571428575,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        5,
+        1,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        20.833332538604736,
+        -73.13961029052734,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5000000000000001,
+        0.40909090909090906,
+        0.13333333333333336,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.16666666666666669
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        5,
+        2,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        20.833332538604736,
+        1.1582570225000381,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.3181818181818182,
+        0.16666666666666669,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.25
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.11764705882352941
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        3.6285868883132935,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.4999999999999999,
+        0.125,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -74.29382705688477,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.16666666666666669
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.0625
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.23529411764705882
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.25000000000000006,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.0625,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.17647058823529413
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.0625,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.11764705882352941,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        3.6285868883132935,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.19999999999999998,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -73.14681625366211,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.16666666666666669,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.25000000000000006,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -74.60152816772461,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.11764705882352941,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.22222222222222218,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.17647058823529413
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        5,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        20.833332538604736,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.22222222222222218,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5000000000000001,
+        0.23529411764705882,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.06666666666666667,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.1875,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.16666666666666669,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.125
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.28571428571428575
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.14285714285714285,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        1.2253655195236206,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.17647058823529413,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        0,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -74.29382705688477,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        1.0,
+        1.0,
+        0.14285714285714288
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -73.14681625366211,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.22222222222222218,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.16666666666666669,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.11764705882352941,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -74.60152816772461,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.16666666666666669,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.06666666666666667
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.2631578947368421,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        3.6285868883132935,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.3478260869565218,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.25000000000000006,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.11764705882352941
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -73.14681625366211,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.11764705882352941,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.125,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.17647058823529413
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.06666666666666667
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.0625
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.1470119953155518,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        3,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        3.6285868883132935,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        1.0,
+        1.0,
+        0.125
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        1.1470119953155518,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.22222222222222218,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        0.49788250029087067,
+        -2.0,
+        -73.14681625366211,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.3478260869565218,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        1,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.4922866821289,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.25000000000000006,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        5,
+        3,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        20.833332538604736,
+        1.4551944732666016,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.42307692307692313,
+        0.31818181818181823,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -74.60152816772461,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.31818181818181823,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        1.0,
+        0.06666666666666667
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.2105263157894737
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.16666666666666669
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        -73.99016571044922,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        1.0,
+        0.2777777777777778
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        0,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -74.60152816772461,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.11764705882352941,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.4551944732666016,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.2105263157894737,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      "right": [
+        4,
+        3,
+        -1,
+        -1,
+        -1
+      ],
+      "feature": [
+        5,
+        2,
+        -2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        20.833332538604736,
+        1.1582570225000381,
+        -2.0,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.4166666666666666,
+        0.30000000000000004,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        -1
+      ],
+      "feature": [
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        1.1470119953155518,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.5,
+        0.17647058823529413,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        1,
+        -1,
+        3,
+        -1,
+        -1
+      ],
+      "right": [
+        2,
+        -1,
+        4,
+        -1,
+        -1
+      ],
+      "feature": [
+        3,
+        -2,
+        2,
+        -2,
+        -2
+      ],
+      "threshold": [
+        3.6285868883132935,
+        -2.0,
+        1.1470119953155518,
+        -2.0,
+        -2.0
+      ],
+      "probability_handover": [
+        0.49999999999999994,
+        0.3,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "left": [
+        -1
+      ],
+      "right": [
+        -1
+      ],
+      "feature": [
+        -2
+      ],
+      "threshold": [
+        -2.0
+      ],
+      "probability_handover": [
+        1.0
+      ]
+    }
+  ],
+  "dataset_sha256": "d2a723f8b90eea17cba2351cbd32f82e927d59c868a9dae95f593cf944a5c082",
+  "dataset_report_sha256": "a406a47b60cdbd923e117c75f24478a63fc176a164cc83a3cfa606c82b00fe9b",
+  "implementation_sha256": "29d31b0bd3040f49f7b671d274dbab7a2be99c64d2600dae53f957be837613ea",
+  "python_version": "3.14.6",
+  "sklearn_version": "1.9.1",
+  "training_parameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced_subsample",
+    "criterion": "gini",
+    "max_depth": 8,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 2,
+    "min_samples_split": 2,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 128,
+    "n_jobs": 1,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "fit_groups": [
+    "conservative-three-cell-linear-pilot-family"
+  ],
+  "fit_predecision_hashes": [
+    "0c513686ba0cb74a38ada2d25df305e568bfb2a119c74d3c7896efb8fa7f18d7",
+    "230b2930bba3d7753d1eca93b58710c88561c6443ecb8a3e986b54c1cb998453",
+    "2c9fcbdf279e72c19a80884f9f3b9da83a829edf431342fbb4133eb0d377821e",
+    "2dc525fc89671011af7ea8ae922bdef611e02c94c69b03b5a7ab3095d9566725",
+    "444603c59580c1349de89a9f7b68e703d3e4a09030d0895143bbf7a211d0d3d4",
+    "4ea20e7f130ca55564c18d3b3170f72d43211966d7c741b7481666f7acdd1f75",
+    "629e9292cfd5f2291868408433133058ab09258d7a1d04ae7c831aebc0c8c2c4",
+    "65c062d92d6b1559daf5856c3c23920e6fd91b0ea58b58df9432c43bdd882119",
+    "7d0a8cc7fc9778b94feb9fa3cb969c6aebd58579cff48e9fc47ecae1e93f4b3f",
+    "8d5656f807722c6c357a33546eba00c6a36206a26b0a9bd1be0fd670a973d9ba",
+    "ac4c861c6824bd160dfb281f85aea774a47891d513afad10fb5dbe1b65899783",
+    "b88589547e613f4aaf8303e7d14ae8f9faa5e30cddb65b0cfe46a194af51914f",
+    "b8a8c63fd96a6b1eef51a6683c2aa806b31394be731f388a215f7f4ec853c4f4",
+    "be7a635a08429f9fdf9e85f78138d73c741e9bc1de92601deee9cc8d89f45809",
+    "d6a500642ee9d8e3c85e13596ea3b41494372142089d7500376e2103a1227391",
+    "e9f5e239ca83094b650fa317f9350d06e64f1cb27ff06b81b8c5d04d67219abe"
+  ],
+  "fit_feature_fingerprints": [
+    "04e183ae5cf0506c1f936c2145177759b3b5d9a51e21555c38558925f8881597",
+    "39a1d77321e2ac3450528ba821aa1ecfacf340b201f4c3e5955342c61cd9d2d1",
+    "e4b0f7afe71e5e5575ff7f32fbf7906916093d4d90c547a96572ee451b0b1dc4",
+    "f4671e5e8064182dd41c33532568c44a48de73e33e4f0ffd533e414b936c44f1"
+  ],
+  "verified_simulator_source_sha256": [
+    "5f3c6cb07feb19489b7f785463ef62a31692e9f04a4107512d58dfb97f5fae87"
+  ],
+  "independent_validation_available": false,
+  "service_failure_aware": false,
+  "probability_interpretation": "Uncalibrated RF weighted-leaf class score; not a guarantee of action benefit."
+}

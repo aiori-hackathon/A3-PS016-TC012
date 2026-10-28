@@ -1,0 +1,98 @@
+[
+  {
+    "id": "training-state-0",
+    "kind": "observed_training_input",
+    "features": {
+      "serving_rsrp_dbm": -74.022006,
+      "candidate_rsrp_dbm": -73.457015,
+      "rsrp_delta_db": 0.564991,
+      "delta_slope_db_per_s": 5.794893,
+      "trend_available": 1.0,
+      "speed_mps": 33.333333,
+      "mobility_age_s": 0.1
+    },
+    "valid": true,
+    "probability_handover": 0.9808879966460269,
+    "prediction": 1
+  },
+  {
+    "id": "training-state-1",
+    "kind": "observed_training_input",
+    "features": {
+      "serving_rsrp_dbm": -74.565653,
+      "candidate_rsrp_dbm": -72.83662,
+      "rsrp_delta_db": 1.729033,
+      "delta_slope_db_per_s": 5.820208,
+      "trend_available": 1.0,
+      "speed_mps": 33.333333,
+      "mobility_age_s": 0.1
+    },
+    "valid": true,
+    "probability_handover": 1.0,
+    "prediction": 1
+  },
+  {
+    "id": "training-state-2",
+    "kind": "observed_training_input",
+    "features": {
+      "serving_rsrp_dbm": -73.958329,
+      "candidate_rsrp_dbm": -73.527555,
+      "rsrp_delta_db": 0.430774,
+      "delta_slope_db_per_s": 1.448108,
+      "trend_available": 1.0,
+      "speed_mps": 8.333333,
+      "mobility_age_s": 0.1
+    },
+    "valid": true,
+    "probability_handover": 0.4632145485970288,
+    "prediction": 0
+  },
+  {
+    "id": "training-state-3",
+    "kind": "observed_training_input",
+    "features": {
+      "serving_rsrp_dbm": -74.637406,
+      "candidate_rsrp_dbm": -72.751666,
+      "rsrp_delta_db": 1.88574,
+      "delta_slope_db_per_s": 1.462281,
+      "trend_available": 1.0,
+      "speed_mps": 8.333333,
+      "mobility_age_s": 0.1
+    },
+    "valid": true,
+    "probability_handover": 0.9827831296992481,
+    "prediction": 1
+  },
+  {
+    "id": "missing-trend-fixture",
+    "kind": "software_fixture",
+    "features": {
+      "serving_rsrp_dbm": -74.022006,
+      "candidate_rsrp_dbm": -73.457015,
+      "rsrp_delta_db": 0.564991,
+      "delta_slope_db_per_s": null,
+      "trend_available": 0.0,
+      "speed_mps": 33.333333,
+      "mobility_age_s": 0.1
+    },
+    "valid": true,
+    "probability_handover": 0.9808879966460269,
+    "prediction": 1
+  },
+  {
+    "id": "invalid-serving-fixture",
+    "kind": "software_fixture",
+    "features": {
+      "serving_rsrp_dbm": null,
+      "candidate_rsrp_dbm": -73.457015,
+      "rsrp_delta_db": 0.564991,
+      "delta_slope_db_per_s": 5.794893,
+      "trend_available": 1.0,
+      "speed_mps": 33.333333,
+      "mobility_age_s": 0.1
+    },
+    "valid": false,
+    "probability_handover": null,
+    "prediction": null
+  }
+]

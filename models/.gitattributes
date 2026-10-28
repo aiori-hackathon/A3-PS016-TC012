@@ -1,0 +1,2 @@
+# Exported checksums refer to exact bytes, including their original line endings.
+rf-prototype-v1/* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
