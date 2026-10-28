@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "model_id": "rf-prototype-packet-v1-d2a723f8b90e",
+  "feature_order": [
+    {
+      "index": 0,
+      "name": "serving_rsrp_dbm",
+      "unit": "dBm"
+    },
+    {
+      "index": 1,
+      "name": "candidate_rsrp_dbm",
+      "unit": "dBm"
+    },
+    {
+      "index": 2,
+      "name": "rsrp_delta_db",
+      "unit": "dB"
+    },
+    {
+      "index": 3,
+      "name": "delta_slope_db_per_s",
+      "unit": "dB/s"
+    },
+    {
+      "index": 4,
+      "name": "trend_available",
+      "unit": "0 or 1"
+    },
+    {
+      "index": 5,
+      "name": "speed_mps",
+      "unit": "m/s"
+    },
+    {
+      "index": 6,
+      "name": "mobility_age_s",
+      "unit": "s"
+    }
+  ],
+  "scaling": "none",
+  "medians": {
+    "serving_rsrp_dbm": -74.2938295,
+    "candidate_rsrp_dbm": -73.1468175,
+    "rsrp_delta_db": 1.1470120000000001,
+    "delta_slope_db_per_s": 3.628587,
+    "trend_available": 1.0,
+    "speed_mps": 20.833333000000003,
+    "mobility_age_s": 0.1
+  },
+  "missing_trend": "When trend_available=0, ignore the supplied slope and use training median at index 3. JSON null/C++ NaN is accepted there only.",
+  "invalid_inputs": "Reject missing/nonfinite required values, trend flags outside {0,1}, RSRP delta mismatch >1e-5, speed<=0, or mobility age outside [0,0.5].",
+  "tree_input_dtype": "IEEE-754 float32",
+  "comparison": "<= goes to left child; otherwise right",
+  "aggregation": "Mean of probability_handover at reached leaves across 128 trees",
+  "decision": "HANDOVER (1) iff probability_handover >= 0.6; otherwise STAY (0). Invalid predictions have no action.",
+  "cadence_s": 0.2,
+  "feature_max_age_s": 0.2,
+  "simulator_responsibilities": [
+    "Use only pre-action measurements and the agreed slope/candidate history.",
+    "Select/validate the candidate cell; the binary forest does not output a cell ID.",
+    "Gate active handovers, RRC state, measurement freshness, target validity and agreed cooldown.",
+    "On invalid inputs do not trigger an RF handover; apply the explicitly documented fallback.",
+    "Log RF score, raw prediction, actual gated action, target and model ID."
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "protocol_id": "observed-packet-preference-v1",
+  "status": "fixed_offline_label_definition",
+  "objective": "observed_packet_performance",
+  "priority": ["total_excess_gap_s", "throughput_mbps"],
+  "horizon_s": 1.0,
+  "action_hold_s": 0.2,
+  "gap_margin_s": 0.005,
+  "throughput_margin_mbps": 0.01,
+  "service_failure_treatment": "excluded_from_this_objective; unknown_values_preserved",
+  "simulator_followup_status": "as_run; not jointly frozen",
+  "design_timing": "exploratory definition selected after inspecting pilot results",
+  "label_definitions": {"0": "STAY has better observed packet performance", "1": "HANDOVER has better observed packet performance", "-1": "tie or incomplete observation; exclude from fitting"},
+  "training_source_requirement": "archived simulator source SHA256 verified by intake",
+  "limitations": [
+    "This is a separate, narrower objective than the draft service-failure-first protocol.",
+    "A packet preference is not evidence of better connectivity, radio outage or end-to-end loss.",
+    "Labels reflect realized paired outcomes, not an expectation over channel/RNG conditions.",
+    "Repeated/conflicting inputs must remain together; no random row split.",
+    "No independent validation/test evidence is currently available."
+  ]
+}
