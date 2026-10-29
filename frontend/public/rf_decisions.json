@@ -1,0 +1,186 @@
+{
+  "ml_speed30_run11": [
+    {
+      "time_s": 12.3,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.141152,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 12.5,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.430774,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 12.7,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.720635,
+      "valid": true,
+      "handover_score": 0.846427,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 12.708214
+    },
+    {
+      "time_s": 36.3,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.141152,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 36.5,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.430774,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 36.7,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.720635,
+      "valid": true,
+      "handover_score": 0.846427,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 36.708214
+    }
+  ],
+  "ml_speed30_run12": [
+    {
+      "time_s": 12.3,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.141152,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 12.5,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.430774,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 12.7,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.720635,
+      "valid": true,
+      "handover_score": 0.846427,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 12.708214
+    },
+    {
+      "time_s": 36.3,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.141152,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 36.5,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.430774,
+      "valid": true,
+      "handover_score": 0.463215,
+      "action": "STAY",
+      "ho_completed_at_s": null
+    },
+    {
+      "time_s": 36.7,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.720635,
+      "valid": true,
+      "handover_score": 0.846427,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 36.708214
+    }
+  ],
+  "ml_speed120_run11": [
+    {
+      "time_s": 3.3,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.564991,
+      "valid": true,
+      "handover_score": 0.980888,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 3.308214
+    },
+    {
+      "time_s": 9.3,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.564991,
+      "valid": true,
+      "handover_score": 0.980888,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 9.308214
+    }
+  ],
+  "ml_speed120_run12": [
+    {
+      "time_s": 3.3,
+      "imsi": 1,
+      "serving_cell": 1,
+      "candidate_cell": 2,
+      "rsrp_delta_db": 0.564991,
+      "valid": true,
+      "handover_score": 0.980888,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 3.308214
+    },
+    {
+      "time_s": 9.3,
+      "imsi": 1,
+      "serving_cell": 2,
+      "candidate_cell": 3,
+      "rsrp_delta_db": 0.564991,
+      "valid": true,
+      "handover_score": 0.980888,
+      "action": "HANDOVER",
+      "ho_completed_at_s": 9.308214
+    }
+  ]
+}

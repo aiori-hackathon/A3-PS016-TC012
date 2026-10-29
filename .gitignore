@@ -5,3 +5,40 @@ tmp/
 data/raw/
 output/
 .venv-dashboard/
+# Node.js / React
+node_modules/
+frontend/dist/
+frontend/.env.local
+frontend/.env.*.local
+
+# Python virtual environments
+.venv*/
+venv/
+env/
+
+# Local simulation execution results
+backend/job_results/
+
+# Python caches and test caches
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Local configuration and credentials
+.env
+.env.local
+*.key
+*.pem
+
+# Editor backups
+*.bak
+*.swp
+*.swo
+*~
+
+# Build and temporary outputs
+coverage/
+*.log
+.DS_Store

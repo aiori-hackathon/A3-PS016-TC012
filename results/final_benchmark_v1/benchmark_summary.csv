@@ -1,7 +1,7 @@
-controller,speed_kmh,runs,mean_throughput_mbps,total_ho_successes,total_ho_failures,mean_max_gap_s,total_gaps_over_100ms
-a3,30,2,3.235383,4,0,0.12,20
-rule,30,2,3.234131,4,0,0.1235,22
-ml,30,2,3.237516,4,0,0.031,0
-a3,120,2,3.188643,4,0,0.125,32
-rule,120,2,3.171495,4,0,0.12,37
-ml,120,2,3.235027,4,0,0.031,0
+controller,speed_kmh,runs,mean_throughput_mbps,total_ho_successes,total_ho_failures,mean_max_gap_s,total_gaps_over_100ms,total_pingpong_5s,mean_max_excess_gap_ms,total_excess_gaps_over_5ms,total_skipped_sequence_numbers
+a3,30,2,3.235383,4,0,0.12,20,0,100.0,59,41
+rule,30,2,3.234131,4,0,0.1235,22,0,100.0,49,58
+ml,30,2,3.237516,4,0,0.031,0,0,20.0,8,12
+a3,120,2,3.188643,4,0,0.125,32,0,100.0,129,177
+rule,120,2,3.171495,4,0,0.12,37,0,100.0,161,238
+ml,120,2,3.235027,4,0,0.031,0,0,20.0,8,12

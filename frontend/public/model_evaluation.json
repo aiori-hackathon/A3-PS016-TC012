@@ -1,0 +1,94 @@
+{
+  "model_id": "rf-prototype-packet-v1-d2a723f8b90e",
+  "model_status": "integration_prototype_unvalidated",
+  "training_rows": 16,
+  "unique_feature_vectors": 4,
+  "class_counts": {
+    "1": 15,
+    "0": 1
+  },
+  "prediction_counts_on_training_inputs": {
+    "1": 12,
+    "0": 4
+  },
+  "training_resubstitution_metrics_only": {
+    "rows": 16,
+    "groups": 1,
+    "class_counts": {
+      "1": 15,
+      "0": 1
+    },
+    "threshold": 0.6,
+    "accuracy": 0.8125,
+    "balanced_accuracy": 0.9,
+    "handover_precision": 1.0,
+    "handover_recall": 0.8,
+    "handover_f1": 0.8888888888888888,
+    "brier_score": 0.06760189610789029,
+    "confusion_matrix_rows_true_columns_predicted_stay_handover": [
+      [
+        1,
+        0
+      ],
+      [
+        3,
+        12
+      ]
+    ],
+    "mean_group_accuracy": 0.8125
+  },
+  "validation_metrics": null,
+  "test_metrics": null,
+  "independent_validation_available": false,
+  "json_sklearn_max_absolute_error": 1.1102230246251565e-16,
+  "cpp_compile_and_parity": "not_run: no local C++ compiler was found; run the included standalone checker on Joe\u2019s system",
+  "hyperparameter_search_performed": false,
+  "threshold_tuned": false,
+  "training_weighting": "Use supplied per-feature-vector weights, multiplied by balanced_subsample class weights within each tree.",
+  "input_ranges": {
+    "serving_rsrp_dbm": {
+      "min": -74.637406,
+      "max": -73.958329
+    },
+    "candidate_rsrp_dbm": {
+      "min": -73.527555,
+      "max": -72.751666
+    },
+    "rsrp_delta_db": {
+      "min": 0.430774,
+      "max": 1.88574
+    },
+    "delta_slope_db_per_s": {
+      "min": 1.448108,
+      "max": 5.820208
+    },
+    "trend_available": {
+      "min": 1.0,
+      "max": 1.0
+    },
+    "speed_mps": {
+      "min": 8.333333,
+      "max": 33.333333
+    },
+    "mobility_age_s": {
+      "min": 0.1,
+      "max": 0.1
+    }
+  },
+  "limitations": [
+    "This is a separate, narrower objective than the draft service-failure-first protocol.",
+    "A packet preference is not evidence of better connectivity, radio outage or end-to-end loss.",
+    "Labels reflect realized paired outcomes, not an expectation over channel/RNG conditions.",
+    "Repeated/conflicting inputs must remain together; no random row split.",
+    "No independent validation/test evidence is currently available.",
+    "Primary training rows require source SHA256 verification; other audited labels are supplemental.",
+    "config_id hashes the exported partial configuration, not a complete resolved simulator configuration.",
+    "This dataset cannot establish RF generalization or improvement over A3.",
+    "The existing service-failure-first validated trainer is unchanged and is not compatible with this narrower protocol.",
+    "One scenario family and a single STAY example cannot support a defensible two-class train/validation split.",
+    "This prototype is fit on all eligible primary rows; no held-out accuracy is available.",
+    "A single STAY observation and four distinct inputs cannot establish a useful policy.",
+    "Training class weighting changes scores; 0.6 is the agreed initial threshold, not a calibrated confidence.",
+    "This export does not implement or validate an ns-3 policy and does not establish RF improvement over A3."
+  ]
+}

@@ -1,0 +1,636 @@
+{
+  "summary": [
+    {
+      "controller": "a3",
+      "speed_kmh": 30,
+      "runs": "2",
+      "mean_throughput_mbps": 3.235383,
+      "total_ho_successes": 4,
+      "total_ho_failures": 0,
+      "mean_max_gap_s": "0.12",
+      "total_gaps_over_100ms": "20",
+      "total_pingpong_5s": 0,
+      "mean_max_excess_gap_ms": 100.0,
+      "total_excess_gaps_over_5ms": "59",
+      "total_skipped_sequence_numbers": "41"
+    },
+    {
+      "controller": "rule",
+      "speed_kmh": 30,
+      "runs": "2",
+      "mean_throughput_mbps": 3.234131,
+      "total_ho_successes": 4,
+      "total_ho_failures": 0,
+      "mean_max_gap_s": "0.1235",
+      "total_gaps_over_100ms": "22",
+      "total_pingpong_5s": 0,
+      "mean_max_excess_gap_ms": 100.0,
+      "total_excess_gaps_over_5ms": "49",
+      "total_skipped_sequence_numbers": "58"
+    },
+    {
+      "controller": "ml",
+      "speed_kmh": 30,
+      "runs": "2",
+      "mean_throughput_mbps": 3.237516,
+      "total_ho_successes": 4,
+      "total_ho_failures": 0,
+      "mean_max_gap_s": "0.031",
+      "total_gaps_over_100ms": "0",
+      "total_pingpong_5s": 0,
+      "mean_max_excess_gap_ms": 20.0,
+      "total_excess_gaps_over_5ms": "8",
+      "total_skipped_sequence_numbers": "12"
+    },
+    {
+      "controller": "a3",
+      "speed_kmh": 120,
+      "runs": "2",
+      "mean_throughput_mbps": 3.188643,
+      "total_ho_successes": 4,
+      "total_ho_failures": 0,
+      "mean_max_gap_s": "0.125",
+      "total_gaps_over_100ms": "32",
+      "total_pingpong_5s": 0,
+      "mean_max_excess_gap_ms": 100.0,
+      "total_excess_gaps_over_5ms": "129",
+      "total_skipped_sequence_numbers": "177"
+    },
+    {
+      "controller": "rule",
+      "speed_kmh": 120,
+      "runs": "2",
+      "mean_throughput_mbps": 3.171495,
+      "total_ho_successes": 4,
+      "total_ho_failures": 0,
+      "mean_max_gap_s": "0.12",
+      "total_gaps_over_100ms": "37",
+      "total_pingpong_5s": 0,
+      "mean_max_excess_gap_ms": 100.0,
+      "total_excess_gaps_over_5ms": "161",
+      "total_skipped_sequence_numbers": "238"
+    },
+    {
+      "controller": "ml",
+      "speed_kmh": 120,
+      "runs": "2",
+      "mean_throughput_mbps": 3.235027,
+      "total_ho_successes": 4,
+      "total_ho_failures": 0,
+      "mean_max_gap_s": "0.031",
+      "total_gaps_over_100ms": "0",
+      "total_pingpong_5s": 0,
+      "mean_max_excess_gap_ms": 20.0,
+      "total_excess_gaps_over_5ms": "8",
+      "total_skipped_sequence_numbers": "12"
+    }
+  ],
+  "runs": [
+    {
+      "id": "a3_speed30_run11",
+      "controller": "a3",
+      "speed_kmh": 30,
+      "rng_run": 11,
+      "throughput_mbps": 3.234573,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 39,
+      "skipped_sequences": 26,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 14.688,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 14.691214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 38.668,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 38.671214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "rule_speed30_run11",
+      "controller": "rule",
+      "speed_kmh": 30,
+      "rng_run": 11,
+      "throughput_mbps": 3.233984,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 36,
+      "skipped_sequences": 30,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 14.905,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 14.908214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 38.705,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 38.708214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "ml_speed30_run11",
+      "controller": "ml",
+      "speed_kmh": 30,
+      "rng_run": 11,
+      "throughput_mbps": 3.237811,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 4,
+      "skipped_sequences": 4,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 12.705,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 12.708214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 36.705,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 36.708214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "a3_speed30_run12",
+      "controller": "a3",
+      "speed_kmh": 30,
+      "rng_run": 12,
+      "throughput_mbps": 3.236192,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 20,
+      "skipped_sequences": 15,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 14.67,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 14.673214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 38.67,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 38.673214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "rule_speed30_run12",
+      "controller": "rule",
+      "speed_kmh": 30,
+      "rng_run": 12,
+      "throughput_mbps": 3.234278,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 13,
+      "skipped_sequences": 28,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 14.905,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 14.908214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 38.705,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 38.708214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "ml_speed30_run12",
+      "controller": "ml",
+      "speed_kmh": 30,
+      "rng_run": 12,
+      "throughput_mbps": 3.237222,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 4,
+      "skipped_sequences": 8,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 12.705,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 12.708214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 36.705,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 36.708214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "a3_speed120_run11",
+      "controller": "a3",
+      "speed_kmh": 120,
+      "rng_run": 11,
+      "throughput_mbps": 3.188924,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 72,
+      "skipped_sequences": 88,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 4.268,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 4.271214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 10.298,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 10.301214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "rule_speed120_run11",
+      "controller": "rule",
+      "speed_kmh": 120,
+      "rng_run": 11,
+      "throughput_mbps": 3.182178,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 88,
+      "skipped_sequences": 100,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 4.505,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 4.508214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 10.325,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 10.328214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "ml_speed120_run11",
+      "controller": "ml",
+      "speed_kmh": 120,
+      "rng_run": 11,
+      "throughput_mbps": 3.236151,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 4,
+      "skipped_sequences": 4,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 3.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 3.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 9.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 9.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "a3_speed120_run12",
+      "controller": "a3",
+      "speed_kmh": 120,
+      "rng_run": 12,
+      "throughput_mbps": 3.188362,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 57,
+      "skipped_sequences": 89,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 4.29,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 4.293214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 10.301,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 10.304214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "rule_speed120_run12",
+      "controller": "rule",
+      "speed_kmh": 120,
+      "rng_run": 12,
+      "throughput_mbps": 3.160813,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 73,
+      "skipped_sequences": 138,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 4.545,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 4.548214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 10.345,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 10.348214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "ml_speed120_run12",
+      "controller": "ml",
+      "speed_kmh": 120,
+      "rng_run": 12,
+      "throughput_mbps": 3.233902,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 4,
+      "skipped_sequences": 8,
+      "pingpong": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 3.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 3.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 9.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 9.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "source": "Recorded ns-3 LTE simulations",
+    "nominal_packet_interval_ms": 10,
+    "pingpong_window_s": 5,
+    "model_status": "Exploratory RF prototype"
+  }
+}

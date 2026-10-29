@@ -1,0 +1,13 @@
+scenario,max_excess_gap_ms,excess_gaps_over_5ms,sequence_numbers_skipped,duplicate_or_reordered_pairs
+a3_speed120_run11,100.0,72,88,0
+a3_speed120_run12,100.0,57,89,0
+a3_speed30_run11,100.0,39,26,0
+a3_speed30_run12,100.0,20,15,0
+ml_speed120_run11,20.0,4,4,0
+ml_speed120_run12,20.0,4,8,0
+ml_speed30_run11,20.0,4,4,0
+ml_speed30_run12,20.0,4,8,0
+rule_speed120_run11,100.0,88,100,0
+rule_speed120_run12,100.0,73,138,0
+rule_speed30_run11,100.0,36,30,0
+rule_speed30_run12,100.0,13,28,0
