@@ -1,3 +1,4 @@
+from aiori_pipeline.pingpong import detect_ping_pong
 
 import csv
 from collections import defaultdict
@@ -122,20 +123,12 @@ def calculate_outcome(decision, action):
         if ho["event"] == "FAILURE"
     ]
 
-    # Count successful A -> B -> A reversals
-    # wholly observed inside this window.
-    ping_pong = 0
-
-    for first, second in zip(
-        successes, successes[1:]
-    ):
-        if (
-            first["source_cell_id"]
-            == second["target_cell_id"]
-            and first["target_cell_id"]
-            == second["source_cell_id"]
-        ):
-            ping_pong += 1
+    # Count successful same-UE reversals completed within 1 second.
+    # Include pre-window history for correct boundary detection.
+    ping_pong = sum(
+        start <= event["return_handover_time_s"] < end
+        for event in detect_ping_pong(handovers, window_s=1.0)
+    )
 
     # Do not confuse handover failures with
     # connectivity/service failures.

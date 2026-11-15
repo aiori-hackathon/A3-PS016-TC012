@@ -98,6 +98,7 @@
       "gaps_over_5ms": 39,
       "skipped_sequences": 26,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -143,6 +144,7 @@
       "gaps_over_5ms": 36,
       "skipped_sequences": 30,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -188,6 +190,7 @@
       "gaps_over_5ms": 4,
       "skipped_sequences": 4,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -233,6 +236,7 @@
       "gaps_over_5ms": 20,
       "skipped_sequences": 15,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -278,6 +282,7 @@
       "gaps_over_5ms": 13,
       "skipped_sequences": 28,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -323,6 +328,7 @@
       "gaps_over_5ms": 4,
       "skipped_sequences": 8,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -368,6 +374,7 @@
       "gaps_over_5ms": 72,
       "skipped_sequences": 88,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -413,6 +420,7 @@
       "gaps_over_5ms": 88,
       "skipped_sequences": 100,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -458,6 +466,7 @@
       "gaps_over_5ms": 4,
       "skipped_sequences": 4,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -503,6 +512,7 @@
       "gaps_over_5ms": 57,
       "skipped_sequences": 89,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -548,6 +558,7 @@
       "gaps_over_5ms": 73,
       "skipped_sequences": 138,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,
@@ -593,6 +604,7 @@
       "gaps_over_5ms": 4,
       "skipped_sequences": 8,
       "pingpong": 0,
+      "pingpong_1s": 0,
       "events": [
         {
           "time_s": 0.028,

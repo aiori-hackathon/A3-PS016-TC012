@@ -32,6 +32,7 @@ type Run = {
   gaps_over_5ms: number;
   skipped_sequences: number;
   pingpong: number;
+  pingpong_1s: number;
   events: Event[];
 };
 
@@ -122,6 +123,7 @@ export default function App() {
       successes: selected.reduce((n, r) => n + r.ho_successes, 0),
       failures: selected.reduce((n, r) => n + r.ho_failures, 0),
       pingpong: selected.reduce((n, r) => n + r.pingpong, 0),
+      pingpog_1s: selected.reduce((n, r) => n + r.pingpong_1s, 0),
       skipped: selected.reduce((n, r) => n + r.skipped_sequences, 0),
     };
   }), [filtered]);

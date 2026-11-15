@@ -25,6 +25,7 @@ type Run = {
   ho_successes: number;
   ho_failures: number;
   pingpong: number;
+  pingpong_1s: number;
   events: Event[];
 };
 

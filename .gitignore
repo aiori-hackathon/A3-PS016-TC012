@@ -42,3 +42,13 @@ __pycache__/
 coverage/
 *.log
 .DS_Store
+# Python virtual environment and packaging
+.venv/
+*.egg-info/
+__pycache__/
+
+# Local backups
+/backups/
+
+# Vercel local metadata
+/frontend/.vercel/

@@ -8,6 +8,7 @@ import random
 import statistics
 import sys
 from collections import defaultdict
+from aiori_pipeline.pingpong import detect_ping_pong
 from pathlib import Path
 
 
@@ -163,14 +164,33 @@ def evaluate(meta, tables, attempts, ping_window):
     failures = sum(bool(terminal(a) and terminal(a)["event"] == "FAILURE") for a in selected)
     successes = sum(bool(terminal(a) and terminal(a)["event"] == "SUCCESS") for a in selected)
     censored = len(selected) - failures - successes
-    ping, last = 0, {}
-    # Include pre-window successes for boundary context; count returns in-window.
-    for a in sorted((a for a in attempts.values() if a["end"] and a["end"]["event"] == "SUCCESS"), key=lambda a: a["end"]["time_s"]):
-        row, end = a["start"], a["end"]["time_s"]
-        prev = last.get(row["imsi"])
-        if prev and start <= end < stop and row["source_cell_id"] == prev[1] and row["target_cell_id"] == prev[0] and end - prev[2] <= ping_window:
-            ping += 1
-        last[row["imsi"]] = row["source_cell_id"], row["target_cell_id"], end
+        # Include successful handovers before the observation window
+    # so returns near the start boundary are correctly detected.
+    successful_handovers = []
+
+    for attempt in attempts.values():
+        end = attempt["end"]
+
+        if end and end["event"] == "SUCCESS":
+            row = attempt["start"]
+
+            successful_handovers.append({
+                "time_s": end["time_s"],
+                "imsi": row["imsi"],
+                "source_cell_id": row["source_cell_id"],
+                "target_cell_id": row["target_cell_id"],
+                "event": "SUCCESS",
+            })
+
+    detected_returns = detect_ping_pong(
+        successful_handovers,
+        window_s=ping_window,
+    )
+
+    ping = sum(
+        start <= event["return_handover_time_s"] < stop
+        for event in detected_returns
+    )
     packet_groups = defaultdict(list)
     for row in tables["packets.csv"]:
         packet_groups[flow_key(row)].append(row)

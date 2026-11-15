@@ -32,6 +32,7 @@ for row in per_run:
     serving = {}
     histories = {}
     pingpong = 0
+    pingpong_1s = 0
 
     for event in sorted(events, key=lambda e: float(e["time_s"])):
         imsi = event["imsi"]
@@ -51,7 +52,9 @@ for row in per_run:
                     if (old_source == cell
                             and old_target == previous
                             and 0 <= t - old_t <= 5):
-                        pingpong += 1
+                         pingpong += 1
+                         if t - old_t <= 1.0:
+                            pingpong_1s += 1
 
                 history.append((t, previous, cell))
 
@@ -69,6 +72,7 @@ for row in per_run:
         "gaps_over_5ms": int(gap["excess_gaps_over_5ms"]),
         "skipped_sequences": int(gap["sequence_numbers_skipped"]),
         "pingpong": pingpong,
+        "pingpong_1s": pingpong_1s,
         "events": [
             {
                 "time_s": float(e["time_s"]),
