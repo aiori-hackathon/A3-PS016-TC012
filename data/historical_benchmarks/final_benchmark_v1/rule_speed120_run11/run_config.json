@@ -1,0 +1,17 @@
+{
+  "controller": "rule",
+  "program": "mobi-ho-rf",
+  "speed_kmh": 120,
+  "rng_seed": 1,
+  "rng_run": 11,
+  "number_of_ues": 1,
+  "number_of_enbs": 3,
+  "disable_dl": false,
+  "disable_ul": false,
+  "command": [
+    "./ns3",
+    "run",
+    "scratch/mobi-ho-rf --numberOfUes=1 --numberOfEnbs=3 --speedKmh=120 --rngSeed=1 --rngRun=11 --disableDl=0 --disableUl=0"
+  ],
+  "source_sha256": "d5b578043111443163a958d758438a22faf31123a709b98c3c7f95aa3a783e94"
+}
