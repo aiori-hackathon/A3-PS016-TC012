@@ -129,16 +129,15 @@ export default function SimulationControl() {
     <div className="sim-control">
       <div className="sim-header">
         <div>
-          <h3><Server size={18} /> Simulation Control Center</h3>
-          <p>Launch an actual ns-3 LTE handover experiment</p>
+          <h3><Server size={18} /> New simulation</h3>
+          <p>Choose a controller, travel speed and RNG run.</p>
         </div>
-        <span className="sim-local">LOCAL EXECUTION</span>
+        <span className="sim-local">{API ? "Live API configured" : "Recorded mode"}</span>
       </div>
 
       {!API && (
-        <p className="sim-error">
-          Live simulation API is not configured.
-          Recorded benchmark visualization remains available.
+        <p className="sim-context">
+          Live runs require a simulation server. Explore the saved runs in Network Overview or Network Digital Twin.
         </p>
       )}
 
@@ -147,7 +146,7 @@ export default function SimulationControl() {
           Controller
           <select
             value={controller}
-            disabled={busy}
+            disabled={!API || busy}
             onChange={(e) =>
               setController(e.target.value as Controller)
             }
@@ -162,7 +161,7 @@ export default function SimulationControl() {
           UE Speed
           <select
             value={speed}
-            disabled={busy}
+            disabled={!API || busy}
             onChange={(e) => setSpeed(Number(e.target.value))}
           >
             <option value={30}>30 km/h</option>
@@ -174,7 +173,7 @@ export default function SimulationControl() {
           RNG Run
           <select
             value={rngRun}
-            disabled={busy}
+            disabled={!API || busy}
             onChange={(e) => setRngRun(Number(e.target.value))}
           >
             <option value={11}>Run 11</option>
