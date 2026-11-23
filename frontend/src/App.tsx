@@ -11,7 +11,9 @@ import {
   XAxis, YAxis, Tooltip
 } from "recharts";
 import NetworkTwin from "./components/NetworkTwin";
+import HandoverTimeline from "./components/HandoverTimeline";
 import "./App.css";
+import "./workspace.css";
 import SimulationControl from "./components/SimulationControl";
 type Event = {
   time_s: number;
@@ -73,12 +75,12 @@ const policies = ["a3", "rule", "ml"];
 
 const navigation = [
   { id: "overview", name: "Network Overview", Icon: LayoutDashboard },
-  { id: "simulation-control", name: "Simulation Control", Icon: Activity },
   { id: "topology", name: "Network Digital Twin", Icon: RadioTower },
   { id: "comparison", name: "Benchmark Comparison", Icon: BarChart3 },
   { id: "events", name: "Handover Events", Icon: ArrowLeftRight },
   { id: "methodology", name: "Model & Methodology", Icon: BrainCircuit },
   { id: "model-evaluation", name: "Model Evaluation", Icon: Activity },
+  { id: "simulation-control", name: "Live Simulation", Icon: Activity },
 ];
 
 export default function App() {
@@ -88,16 +90,20 @@ export default function App() {
   const [run, setRun] = useState("all");
   const [policy, setPolicy] = useState("ml");
   const [active, setActive] = useState("overview");
+  const [replay, setReplay] = useState({ id: "", revision: 0 });
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/benchmark` : `${import.meta.env.BASE_URL}benchmark.json`)
+    const abort = new AbortController();
+    fetch(import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/benchmark` : `${import.meta.env.BASE_URL}benchmark.json`, { signal: abort.signal })
       .then((response) => {
         if (!response.ok) throw new Error("Benchmark JSON not found");
         return response.json();
       })
       .then(setData)
-      .catch((err) => setError(String(err)));
-  }, []);
+      .catch((err) => { if (!abort.signal.aborted) setError(String(err)); });
+    return () => abort.abort();
+  }, [reload]);
 
   const filtered = useMemo(() => {
     if (!data) return [];
@@ -107,7 +113,7 @@ export default function App() {
     );
   }, [data, speed, run]);
 
-  const comparison = useMemo(() => policies.map((p) => {
+  const comparison = useMemo(() => policies.filter(p => filtered.some(r => r.controller === p)).map((p) => {
     const selected = filtered.filter((r) => r.controller === p);
     const avg = (key: keyof Run) =>
       selected.length
@@ -123,7 +129,6 @@ export default function App() {
       successes: selected.reduce((n, r) => n + r.ho_successes, 0),
       failures: selected.reduce((n, r) => n + r.ho_failures, 0),
       pingpong: selected.reduce((n, r) => n + r.pingpong, 0),
-      pingpog_1s: selected.reduce((n, r) => n + r.pingpong_1s, 0),
       skipped: selected.reduce((n, r) => n + r.skipped_sequences, 0),
     };
   }), [filtered]);
@@ -171,12 +176,19 @@ export default function App() {
   };
 
   if (error) {
-    return <main className="loading">Unable to load benchmark: {error}</main>;
+    return <main className="loading" role="alert"><h1>Benchmark unavailable</h1><p>{error}</p>
+      <button className="export-button" onClick={() => { setError(""); setReload(n => n + 1); }}>Try again</button></main>;
   }
 
   if (!data) {
-    return <main className="loading">Loading MOBI-HO benchmark data…</main>;
+    return <main className="loading" role="status">Loading recorded benchmarks…</main>;
   }
+
+  const showFilters = ["overview", "comparison", "events"].includes(active);
+  const speedOptions = [...new Set(data.runs.map(r => r.speed_kmh))].sort((a, b) => a - b);
+  const runOptions = [...new Set(data.runs.filter(r => r.speed_kmh === speed).map(r => r.rng_run))].sort((a, b) => a - b);
+  const scopeRuns = run === "all" ? data.runs : data.runs.filter(r => r.rng_run === Number(run));
+  const livePage = active === "simulation-control";
 
   return (
     <div className="shell">
@@ -187,14 +199,18 @@ export default function App() {
             <strong>MOBI-HO</strong>
             <small>LAB / AIORI-3</small>
           </div>
+          <select className="mobile-nav" aria-label="Dashboard page" value={active} onChange={e => navigate(e.target.value)}>
+            {navigation.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+          </select>
         </div>
 
-        <div className="nav-caption">WORKSPACE</div>
-        <nav>
+        <div className="nav-caption">Workspace</div>
+        <nav aria-label="Dashboard pages">
           {navigation.map(({ id, name, Icon }) => (
             <button
               key={id}
               className={`nav-item ${active === id ? "selected" : ""}`}
+              aria-current={active === id ? "page" : undefined}
               onClick={() => navigate(id)}
             >
               <Icon size={17} />
@@ -206,9 +222,8 @@ export default function App() {
 
         <div className="sidebar-bottom">
           <span className="status-dot" />
-          DATASET LOADED
-          <p>12 verified simulation runs</p>
-          <p>LTE · Three-cell topology</p>
+          RECORDED DATASET
+          <p>{data.runs.length} runs · Three-cell LTE</p>
         </div>
       </aside>
 
@@ -219,42 +234,48 @@ export default function App() {
             <strong>{navigation.find(item => item.id === active)?.name ?? "Network Overview"}</strong>
           </div>
           <div className="top-right">
-            <span className="data-tag"><Database size={13} /> RECORDED DATA</span>
-            <span className="top-identity">PS-016 / LEVEL 2</span>
+            <span className={`data-tag ${livePage ? "live" : ""}`}>{livePage ? <Activity size={13}/> : <Database size={13}/>}
+              {livePage ? "Live simulation" : "Recorded data"}</span>
           </div>
         </header>
 
         <div className="content">
-          <section id="overview" className={`section ${active === "overview" ? "page-active" : "page-hidden"}`}>
+          {showFilters && <>
             <div className="page-heading">
               <div>
-                <div className="eyebrow">CELLULAR MOBILITY INTELLIGENCE</div>
-                <h1>Network Overview</h1>
-                <p>Benchmarking LTE handover policies under high mobility</p>
+                <h1>{active === "overview" ? "Network overview" : active === "comparison" ? "Benchmark comparison" : "Handover events"}</h1>
+                <p>{active === "overview" ? "Explore handovers across three LTE cells and three controllers." :
+                  active === "comparison" ? "Compare controller performance at the same speed and RNG run." : "Inspect the recorded event sequence for each controller."}</p>
               </div>
+              {active !== "events" &&
               <button className="export-button" onClick={exportCSV}>
-                <Download size={15} /> Export results
-              </button>
+                <Download size={15} /> Export comparison
+              </button>}
             </div>
 
             <div className="filterbar">
-              <div className="filter-title"><Activity size={16} /> Experiment configuration</div>
+              <div className="filter-title"><Activity size={16} /> Scenario</div>
               <label>
                 UE speed
-                <select value={speed} onChange={(e) => setSpeed(Number(e.target.value))}>
-                  <option value={30}>30 km/h</option>
-                  <option value={120}>120 km/h</option>
+                <select value={speed} onChange={(e) => {
+                  const next = Number(e.target.value);
+                  setSpeed(next);
+                  if (run !== "all" && !data.runs.some(r => r.speed_kmh === next && r.rng_run === Number(run))) setRun("all");
+                }}>
+                  {speedOptions.map(s => <option key={s} value={s}>{s} km/h</option>)}
                 </select>
               </label>
               <label>
                 RNG run
                 <select value={run} onChange={(e) => setRun(e.target.value)}>
                   <option value="all">All runs</option>
-                  <option value="11">Run 11</option>
-                  <option value="12">Run 12</option>
+                  {runOptions.map(r => <option key={r} value={r}>Run {r}</option>)}
                 </select>
               </label>
+              <span className="scope-count">{filtered.length} of {data.runs.length} runs</span>
             </div>
+          </>}
+          <section id="overview" className={`section ${active === "overview" ? "page-active" : "page-hidden"}`}>
 
             <div className="kpis">
               <Metric icon={<Database size={18} />} label="Simulation runs"
@@ -262,9 +283,28 @@ export default function App() {
               <Metric icon={<ArrowLeftRight size={18} />} label="Successful handovers"
                 value={String(totalSuccess)} detail="Completed HO events" />
               <Metric icon={<ShieldCheck size={18} />} label="Logged HO failures"
-                value={String(totalFailures)} detail="Not service-failure count" />
+                value={String(totalFailures)} detail="Service failures unknown" />
               <Metric icon={<Zap size={18} />} label="Ping-pong events"
-                value={String(totalPingpong)} detail="5-second return window" />
+                value={String(totalPingpong)} detail={`${data.metadata.pingpong_window_s}-second return window`} />
+            </div>
+            <div className="overview-grid">
+              <HandoverTimeline runs={filtered} labels={labels} onReplay={id => {
+                setReplay(r => ({ id, revision: r.revision + 1 }));
+                navigate("topology");
+              }}/>
+              <aside className="overview-summary">
+                <h2>Reception gaps</h2>
+                <p>Mean maximum excess gap per run</p>
+                <div className="gap-list">
+                  {comparison.map(r => <div key={r.policy} className="gap-item">
+                    <div><span>{r.controller}</span><strong>{r.gap.toFixed(1)} <small>ms</small></strong></div>
+                    <meter aria-label={r.controller + " reception gap"} min={0} max={Math.max(1, ...comparison.map(item => item.gap))} value={r.gap}
+                      style={{ "--policy-color": colors[r.policy] } as React.CSSProperties}/>
+                  </div>)}
+                </div>
+                <p className="gap-note">Measured between packet arrivals. Service interruption and packet loss are unverified.</p>
+                <button className="detail-link" onClick={() => navigate("comparison")}>Compare controllers <ChevronRight size={15}/></button>
+              </aside>
             </div>
           </section>
 
@@ -274,7 +314,7 @@ export default function App() {
               <h2>Network Topology & Handover Replay</h2>
               <span>RECORDED SIMULATION</span>
             </div>
-            <NetworkTwin runs={data.runs} />
+            <NetworkTwin key={replay.revision} runs={data.runs} initialRunId={replay.id} visible={active === "topology"} />
           </section>
           <section id="simulation-control" className={`section ${active === "simulation-control" ? "page-active" : "page-hidden"}`}>
                <div className="section-heading">
@@ -372,7 +412,7 @@ export default function App() {
                 </table>
               </div>
             </div>
-            <BenchmarkInsights runs={data.runs} speed={speed} />
+            {active === "comparison" && <BenchmarkInsights runs={scopeRuns} speed={speed} />}
 </section>
 
           <section id="events" className={`section ${active === "events" ? "page-active" : "page-hidden"}`}>
@@ -454,7 +494,7 @@ export default function App() {
             >
            <ModelEvaluation />
            </section>
-          <footer>AIORI-3 · PS-016 · MOBI-HO Lab — Evidence-driven cellular handover benchmarking</footer>
+          <footer>AIORI-3 · PS-016 <span>MOBI-HO Lab</span></footer>
         </div>
       </main>
     </div>

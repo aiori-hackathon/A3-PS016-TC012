@@ -160,7 +160,7 @@ export default function BenchmarkInsights({ runs, speed }: Props) {
       <div className="donut-section">
         <DonutBreakdown
           title="Handover Outcomes"
-          subtitle={`Logged results at ${speed} km/h · all recorded RNG runs`}
+          subtitle={`Logged results at ${speed} km/h · selected runs`}
           items={[
             {
               name: "Successful",

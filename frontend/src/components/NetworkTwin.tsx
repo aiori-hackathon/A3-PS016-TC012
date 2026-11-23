@@ -23,6 +23,8 @@ export type TwinRun = {
 
 type Props = {
   runs: TwinRun[];
+  initialRunId: string;
+  visible: boolean;
 };
 
 const names: Record<string, string> = {
@@ -51,8 +53,8 @@ function pointOnRoute(points: Point[], fraction: number): Point {
   };
 }
 
-export default function NetworkTwin({ runs }: Props) {
-  const [selectedId, setSelectedId] = useState("");
+export default function NetworkTwin({ runs, initialRunId, visible }: Props) {
+  const [selectedId, setSelectedId] = useState(initialRunId);
   const [time, setTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [rate, setRate] = useState(5);
@@ -80,7 +82,7 @@ export default function NetworkTwin({ runs }: Props) {
   );
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || !visible) return;
 
     const timer = window.setInterval(() => {
       setTime((current) => {
@@ -98,12 +100,7 @@ export default function NetworkTwin({ runs }: Props) {
     }, 100);
 
     return () => window.clearInterval(timer);
-  }, [playing, duration, rate]);
-
-  useEffect(() => {
-    setTime(0);
-    setPlaying(false);
-  }, [selected?.id]);
+  }, [playing, duration, rate, visible]);
 
   if (!selected) {
     return <p>No recorded simulations available.</p>;
@@ -170,8 +167,9 @@ export default function NetworkTwin({ runs }: Props) {
         </div>
 
         <select
+          aria-label="Recorded run to replay"
           value={selected.id}
-          onChange={(e) => setSelectedId(e.target.value)}
+          onChange={(e) => { setSelectedId(e.target.value); setTime(0); setPlaying(false); }}
         >
           {runs.map((run) => (
             <option key={run.id} value={run.id}>
@@ -462,7 +460,7 @@ export default function NetworkTwin({ runs }: Props) {
       </div>
 
       <div className="twin-playback">
-        <button onClick={() => setPlaying(!playing)}>
+        <button onClick={() => { if (time >= duration) setTime(0); setPlaying(!playing); }}>
           {playing ? <Pause size={16}/> : <Play size={16}/>}
           {playing ? "Pause" : "Play"}
         </button>
