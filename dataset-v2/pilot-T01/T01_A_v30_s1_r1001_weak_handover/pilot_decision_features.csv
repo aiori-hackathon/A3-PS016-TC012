@@ -1,0 +1,2 @@
+decision_time_s,imsi,serving_cell_id,candidate_cell_id,serving_rsrp_dbm,candidate_rsrp_dbm,rsrp_delta_db,delta_slope_db_per_s,trend_available,speed_mps,mobility_age_s,pilot_action
+10.300000,1,1,2,-72.246223,-75.023871,-2.777648,1.489195,1,8.333333,0.100000,handover

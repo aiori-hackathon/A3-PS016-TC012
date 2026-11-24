@@ -1,0 +1,19 @@
+--- /mnt/d/datav2/aiori-v2-validator-review-2026-11-18/aiori_pipeline/dataset_v2_validate.py	2026-11-23 08:38:37.102432300 +0000
++++ /home/jfs13/MOBI-HO-Lab/validator-timing-review/aiori_pipeline/dataset_v2_validate.py	2026-11-24 18:49:12.115510800 +0000
+@@ -354,7 +354,15 @@
+         starts = [h for h in raw['handovers.csv'] if h['event'] == 'START' and h['attempt_id'] == a['attempt_id'] and h['imsi'] == integer(cfg['imsi'], 'imsi')]
+         require(len(starts) == 1 and starts[0]['target_cell_id'] == integer(a['target_cell_id'], 'target'), 'Requested handover lacks actual START evidence')
+         require(starts[0]['source_cell_id'] == integer(row['serving_cell_id'], 'serving'), 'Handover source mismatch')
+-        close(starts[0]['time_s'], cfg['decision_time_s'], 'Handover START time', EPS)
++        # ns-3 schedules the handover request with a 1 ms delay.
++        # Pilot review tolerance: up to 2 ms from decision to START.
++        # Retain actual timestamps; do not rewrite the raw evidence.
++        start_delay = starts[0]['time_s'] - num(
++            cfg['decision_time_s'], 'decision time', 0)
++        require(
++            0 <= start_delay <= 0.002,
++            'Handover START outside 2 ms causal scheduling window'
++        )
+     else:
+         require(not a['attempt_id'] and not a['request_time_s'], 'STAY must not contain an immediate request')
+         require(not any(h['event'] == 'START' and h['imsi'] == integer(cfg['imsi'], 'imsi') and

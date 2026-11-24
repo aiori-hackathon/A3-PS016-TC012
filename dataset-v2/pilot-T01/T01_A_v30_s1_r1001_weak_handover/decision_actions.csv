@@ -1,0 +1,2 @@
+decision_id,requested_action,actual_action,request_time_s,target_cell_id,attempt_id,gate_reason,hold_end_s
+T01_A_v30_s1_r1001_weak_decision_001,handover,handover,10.300000000000001,2,1,,10.500000000000000

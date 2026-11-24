@@ -1,0 +1,5 @@
+time_s,imsi,attempt_id,source_cell_id,target_cell_id,event,failure_reason,event_index
+14.901000207999999,1,1,1,2,START,,597
+14.905214285000000,1,1,1,2,SUCCESS,,598
+38.701000208000004,1,2,2,3,START,,1550
+38.705214284999997,1,2,2,3,SUCCESS,,1551

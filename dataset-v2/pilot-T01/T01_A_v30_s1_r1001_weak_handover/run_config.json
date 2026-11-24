@@ -1,0 +1,91 @@
+{
+  "pilot_contract_id": "paired-pilot-v2-delivery-draft",
+  "feature_schema_id": "ue-candidate-v2-draft",
+  "pair_id": "T01_A_v30_s1_r1001_weak",
+  "action": "handover",
+  "run_id": "T01_A_v30_s1_r1001_weak_handover",
+  "shared_configuration": {
+    "scenario_family_id": "T01",
+    "geometry_variant": "A",
+    "speed_kmh": 30,
+    "seed": 1,
+    "rng_run": 1001,
+    "source_sha256": "143d92ca816eaf369f32c7d983ff3e940d8605d7957bab79a9d14d5bd5404aa7",
+    "ns3_version": "3.46.1",
+    "resolved_geometry": {
+      "enb_positions_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          200,
+          0,
+          0
+        ],
+        [
+          400,
+          0,
+          0
+        ]
+      ],
+      "ue_start_m": [
+        0,
+        0,
+        0
+      ],
+      "distance_m": 200
+    },
+    "resolved_mobility": {
+      "ue_model": "ConstantVelocityMobilityModel",
+      "enb_model": "ConstantPositionMobilityModel",
+      "ue_velocity_mps": [
+        8.333333333333334,
+        0,
+        0
+      ]
+    },
+    "resolved_radio": {
+      "handover_algorithm": "NoOpHandoverAlgorithm",
+      "external_controller": true,
+      "ideal_rrc": true,
+      "other_attributes": "ns-3 source/defaults; not independently frozen"
+    },
+    "scheduler": "ns3::PfFfMacScheduler",
+    "traffic": {
+      "udp_interval_s": 0.1,
+      "max_packets": 1000000,
+      "start_time_range_s": [
+        0.05,
+        0.06
+      ],
+      "remaining_parameters": "Refer to simulator source and traffic.csv"
+    },
+    "rng_stream_assignments": {
+      "status": "No explicit stream assignments verified",
+      "seed": 1,
+      "rng_run": 1001
+    },
+    "followup_policy": {
+      "action_hold_s": 0.2,
+      "decision_cadence_s": 0.2,
+      "margin_db": 3,
+      "persistence_s": 0.4,
+      "cooldown_s": 1,
+      "status": "Draft; requires review"
+    },
+    "trace_coverage": {
+      "radio": true,
+      "mobility": true,
+      "handovers": true,
+      "packets": true,
+      "history_events": true,
+      "service_events": false
+    }
+  },
+  "shared_configuration_sha256": "4d08702a40a3be2c5d8a3e225329ba8c73fde09c7108d6722f4c7266842997ce",
+  "branch_decision_id": "T01_A_v30_s1_r1001_weak_decision_001",
+  "decision_time_s": 10.3,
+  "imsi": 1
+}
