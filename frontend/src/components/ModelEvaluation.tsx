@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { AlertTriangle, Binary, BookOpen, ChartBar, ChevronDown, Cpu, Grid2X2, Layers3, LoaderCircle, SlidersHorizontal } from "lucide-react";
+import PrototypeComparison from "./PrototypeComparison";
 import "./inspection.css";
 
 type Metrics = {
@@ -94,6 +95,7 @@ export default function ModelEvaluation() {
   const total = stay + handover;
   const inputs = Object.entries(report.input_ranges);
   return <div className="inspection-pages model-evaluation">
+    <PrototypeComparison/>
     <div className="inspect-notice"><BookOpen size={17}/><div>
       <strong>Random Forest · training-set evaluation</strong>
       <p>These scores describe the {report.training_rows} observations used to fit the prototype.

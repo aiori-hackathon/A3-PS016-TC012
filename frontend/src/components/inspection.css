@@ -185,3 +185,15 @@
 @media (prefers-reduced-motion: reduce) {
   .inspection-pages *, .inspection-pages *::before { animation-duration: 0s; animation-iteration-count: 1; transition-duration: 0s; }
 }
+.prototype-intro, .prototype-form, .prototype-results, .prototype-metrics { margin: 14px 18px; }
+.prototype-intro { color: var(--muted); font-size: 13px; }
+.prototype-form { display: grid; gap: 13px; justify-items: start; }
+.prototype-form label { display: grid; gap: 5px; color: var(--text); font-size: 12px; }
+.prototype-form small { color: var(--muted); }
+.prototype-form input, .prototype-form select { width: 100%; min-width: 0; border: 1px solid var(--line); border-radius: 7px; background: var(--page); color: var(--text); padding: 8px; font: inherit; }
+.prototype-fields, .prototype-results { display: grid; grid-template-columns: repeat(auto-fit, minmax(138px, 1fr)); gap: 9px; }
+.prototype-fields { width: 100%; }
+.prototype-results:empty { display: none; }
+.prototype-results > div { display: grid; gap: 4px; border: 1px solid var(--line); border-radius: 8px; padding: 11px; font-size: 13px; }
+.prototype-results span { color: var(--muted); }
+.prototype-metrics caption { text-align: left; padding: 8px; }

@@ -12,7 +12,7 @@ export const pages = [
   { id: "comparison", name: "Policy comparison", title: "Policy comparison", group: "Analysis", Icon: ChartNoAxesCombined,
     description: "Compare controller results under matching speed and run conditions." },
   { id: "model-evaluation", name: "Model evaluation", title: "Model evaluation", group: "Analysis", Icon: CircuitBoard,
-    description: "Inspect the Random Forest prototype’s training diagnostics and validation coverage." },
+    description: "Try XGBoost and Logistic Regression and review the training results." },
   { id: "methodology", name: "Methodology", title: "Methodology", group: "Analysis", Icon: BookOpen,
     description: "Read how the benchmark was recorded and what each measurement represents." },
   { id: "simulation-control", name: "Live simulation", title: "Live simulation", group: "Execution", Icon: SlidersHorizontal,
