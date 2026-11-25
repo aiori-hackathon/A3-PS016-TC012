@@ -1,527 +1,118 @@
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, Download, Radio, RotateCcw, SlidersHorizontal } from "lucide-react";
+import { type Benchmark, exportComparison, summarizeControllers } from "./benchmark";
+import { pageFromHash, type PageId } from "./pages";
+import { loadRecordedData } from "./recordedData";
+import WorkspaceNav from "./components/WorkspaceNav";
+import NetworkOverview from "./components/NetworkOverview";
+import NetworkTwin from "./components/NetworkTwin";
 import BenchmarkInsights from "./components/BenchmarkInsights";
 import ModelEvaluation from "./components/ModelEvaluation";
-import { useEffect, useMemo, useState } from "react";
-import {
-  Activity, ArrowLeftRight, BarChart3, BrainCircuit,
-  ChevronRight, Database, Download, LayoutDashboard,
-  RadioTower, ShieldCheck, Zap
-} from "lucide-react";
-import {
-  ResponsiveContainer, BarChart, Bar, CartesianGrid,
-  XAxis, YAxis, Tooltip
-} from "recharts";
-import NetworkTwin from "./components/NetworkTwin";
-import HandoverTimeline from "./components/HandoverTimeline";
+import SimulationControl from "./components/SimulationControl";
+import { Events, Methodology } from "./components/BenchmarkPages";
 import "./App.css";
 import "./workspace.css";
-import SimulationControl from "./components/SimulationControl";
-type Event = {
-  time_s: number;
-  cell_id: number;
-  event: string;
-  target_cell_id: number | null;
-};
 
-type Run = {
-  id: string;
-  controller: string;
-  speed_kmh: number;
-  rng_run: number;
-  throughput_mbps: number;
-  ho_successes: number;
-  ho_failures: number;
-  max_excess_gap_ms: number;
-  gaps_over_5ms: number;
-  skipped_sequences: number;
-  pingpong: number;
-  pingpong_1s: number;
-  events: Event[];
-};
-
-type Summary = {
-  controller: string;
-  speed_kmh: number;
-  mean_throughput_mbps: number;
-  mean_max_excess_gap_ms: number;
-  total_ho_successes: number;
-  total_ho_failures: number;
-  total_pingpong_5s: number;
-};
-
-type Benchmark = {
-  summary: Summary[];
-  runs: Run[];
-  metadata: {
-    source: string;
-    nominal_packet_interval_ms: number;
-    pingpong_window_s: number;
-    model_status: string;
-  };
-};
-
-const labels: Record<string, string> = {
-  a3: "A3-RSRP",
-  rule: "Rule-based",
-  ml: "Random Forest"
-};
-
-const colors: Record<string, string> = {
-  a3: "#58c9da",
-  rule: "#edae83",
-  ml: "#ae91ee"
-};
-
-const policies = ["a3", "rule", "ml"];
-
-const navigation = [
-  { id: "overview", name: "Network Overview", Icon: LayoutDashboard },
-  { id: "topology", name: "Network Digital Twin", Icon: RadioTower },
-  { id: "comparison", name: "Benchmark Comparison", Icon: BarChart3 },
-  { id: "events", name: "Handover Events", Icon: ArrowLeftRight },
-  { id: "methodology", name: "Model & Methodology", Icon: BrainCircuit },
-  { id: "model-evaluation", name: "Model Evaluation", Icon: Activity },
-  { id: "simulation-control", name: "Live Simulation", Icon: Activity },
-];
+const api = import.meta.env.VITE_API_BASE_URL;
 
 export default function App() {
   const [data, setData] = useState<Benchmark | null>(null);
+  const [apiConnected, setApiConnected] = useState(false);
   const [error, setError] = useState("");
-  const [speed, setSpeed] = useState(120);
-  const [run, setRun] = useState("all");
-  const [policy, setPolicy] = useState("ml");
-  const [active, setActive] = useState("overview");
-  const [replay, setReplay] = useState({ id: "", revision: 0 });
   const [reload, setReload] = useState(0);
+  const [speed, setSpeed] = useState(120);
+  const [rng, setRng] = useState("all");
+  const [page, setPage] = useState(pageFromHash);
+  const [replay, setReplay] = useState({ id: "", time: 0, revision: 0 });
+  const mainRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const abort = new AbortController();
-    fetch(import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/benchmark` : `${import.meta.env.BASE_URL}benchmark.json`, { signal: abort.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error("Benchmark JSON not found");
-        return response.json();
+    loadRecordedData<Benchmark>(`${import.meta.env.BASE_URL}benchmark.json`, abort.signal, api ? `${api}/api/benchmark` : undefined)
+      .then(({ data: benchmark, source }) => {
+        setData(benchmark);
+        setApiConnected(source === "api");
+        setSpeed(current => benchmark.runs.some(r => r.speed_kmh === current) ? current : benchmark.runs[0]?.speed_kmh ?? current);
       })
-      .then(setData)
-      .catch((err) => { if (!abort.signal.aborted) setError(String(err)); });
+      .catch((err: Error) => { if (!abort.signal.aborted) setError(err.message); });
     return () => abort.abort();
   }, [reload]);
 
-  const filtered = useMemo(() => {
-    if (!data) return [];
-    return data.runs.filter(
-      (r) => r.speed_kmh === speed &&
-        (run === "all" || r.rng_run === Number(run))
-    );
-  }, [data, speed, run]);
-
-  const comparison = useMemo(() => policies.filter(p => filtered.some(r => r.controller === p)).map((p) => {
-    const selected = filtered.filter((r) => r.controller === p);
-    const avg = (key: keyof Run) =>
-      selected.length
-        ? selected.reduce((total, r) => total + Number(r[key]), 0) /
-          selected.length
-        : 0;
-
-    return {
-      controller: labels[p],
-      policy: p,
-      throughput: Number(avg("throughput_mbps").toFixed(4)),
-      gap: Number(avg("max_excess_gap_ms").toFixed(2)),
-      successes: selected.reduce((n, r) => n + r.ho_successes, 0),
-      failures: selected.reduce((n, r) => n + r.ho_failures, 0),
-      pingpong: selected.reduce((n, r) => n + r.pingpong, 0),
-      skipped: selected.reduce((n, r) => n + r.skipped_sequences, 0),
+  useEffect(() => {
+    const onLocation = () => {
+      setPage(pageFromHash());
+      window.scrollTo({ top: 0, behavior: "instant" });
+      mainRef.current?.focus({ preventScroll: true });
     };
-  }), [filtered]);
+    window.addEventListener("hashchange", onLocation);
+    return () => window.removeEventListener("hashchange", onLocation);
+  }, []);
 
-  const events = useMemo(
-    () => filtered
-      .filter((r) => r.controller === policy)
-      .flatMap((r) => r.events.map((e) => ({
-        ...e,
-        rng_run: r.rng_run
-      })))
-      .sort((a, b) => a.rng_run - b.rng_run || a.time_s - b.time_s),
-    [filtered, policy]
-  );
+  useEffect(() => { document.title = `${page.title} · MOBI-HO Lab`; }, [page.title]);
 
-  const totalSuccess = filtered.reduce((n, r) => n + r.ho_successes, 0);
-  const totalPingpong = filtered.reduce((n, r) => n + r.pingpong, 0);
-  const totalFailures = filtered.reduce((n, r) => n + r.ho_failures, 0);
-
-  const navigate = (id: string) => {
-    setActive(id);
-    window.scrollTo({ top: 0, behavior: "instant" });
-  };
-
-  const exportCSV = () => {
-    const columns = [
-      "controller", "throughput", "gap",
-      "successes", "failures", "pingpong", "skipped"
-    ] as const;
-
-    const content = [
-      columns.join(","),
-      ...comparison.map((r) =>
-        columns.map((key) => r[key]).join(",")
-      )
-    ].join("\n");
-
-    const blob = new Blob([content], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `mobi-ho-${speed}kmh-${run}.csv`;
-    link.click();
-    URL.revokeObjectURL(url);
-  };
-
-  if (error) {
-    return <main className="loading" role="alert"><h1>Benchmark unavailable</h1><p>{error}</p>
-      <button className="export-button" onClick={() => { setError(""); setReload(n => n + 1); }}>Try again</button></main>;
+  function navigate(id: PageId) {
+    if (window.location.hash.slice(1) !== id) window.location.hash = id;
+    else window.scrollTo({ top: 0, behavior: "instant" });
   }
 
-  if (!data) {
-    return <main className="loading" role="status">Loading recorded benchmarks…</main>;
+  function openReplay(id: string, time = 0) {
+    setReplay(previous => ({ id, time, revision: previous.revision + 1 }));
+    navigate("topology");
   }
 
-  const showFilters = ["overview", "comparison", "events"].includes(active);
-  const speedOptions = [...new Set(data.runs.map(r => r.speed_kmh))].sort((a, b) => a - b);
-  const runOptions = [...new Set(data.runs.filter(r => r.speed_kmh === speed).map(r => r.rng_run))].sort((a, b) => a - b);
-  const scopeRuns = run === "all" ? data.runs : data.runs.filter(r => r.rng_run === Number(run));
-  const livePage = active === "simulation-control";
+  if (error || !data) {
+    return <main className="loading" role={error ? "alert" : "status"}>
+      <Radio className="loading-radio" size={38}/><h1>{error ? "Benchmark unavailable" : "Opening the workspace"}</h1>
+      <p>{error || "Loading recorded benchmark data…"}</p>
+      {error && <button className="primary-action" onClick={() => { setError(""); setReload(n => n + 1); }}><RotateCcw size={15}/>Try again</button>}
+    </main>;
+  }
 
-  return (
-    <div className="shell">
-      <aside className="sidebar">
-        <div className="brand">
-          <span className="brand-icon"><RadioTower size={21} /></span>
-          <div>
-            <strong>MOBI-HO</strong>
-            <small>LAB / AIORI-3</small>
-          </div>
-          <select className="mobile-nav" aria-label="Dashboard page" value={active} onChange={e => navigate(e.target.value)}>
-            {navigation.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
-          </select>
+  const speeds = [...new Set(data.runs.map(r => r.speed_kmh))].sort((a, b) => a - b);
+  const availableRng = [...new Set(data.runs.filter(r => r.speed_kmh === speed).map(r => r.rng_run))].sort((a, b) => a - b);
+  const sameRng = data.runs.filter(r => rng === "all" || r.rng_run === Number(rng));
+  const filtered = sameRng.filter(r => r.speed_kmh === speed);
+  const summaries = summarizeControllers(filtered);
+  const hasFilters = ["overview", "comparison", "events"].includes(page.id);
+
+  return <div className="shell">
+    <WorkspaceNav page={page} navigate={navigate} apiConnected={apiConnected} runCount={data.runs.length}/>
+    <main className="main" id="workspace-content" ref={mainRef} tabIndex={-1}>
+      <div className="content">
+        <div className="page-heading" key={page.id}>
+          <div><h1>{page.title}</h1><p>{page.description}</p></div>
+          {(page.id === "overview" || page.id === "comparison") &&
+            <button className="primary-action export-button" disabled={!filtered.length} onClick={() => exportComparison(summaries, speed, rng)}>
+              <Download size={15}/>Export CSV
+            </button>}
         </div>
-
-        <div className="nav-caption">Workspace</div>
-        <nav aria-label="Dashboard pages">
-          {navigation.map(({ id, name, Icon }) => (
-            <button
-              key={id}
-              className={`nav-item ${active === id ? "selected" : ""}`}
-              aria-current={active === id ? "page" : undefined}
-              onClick={() => navigate(id)}
-            >
-              <Icon size={17} />
-              <span>{name}</span>
-              {active === id && <ChevronRight size={15} />}
-            </button>
-          ))}
-        </nav>
-
-        <div className="sidebar-bottom">
-          <span className="status-dot" />
-          RECORDED DATASET
-          <p>{data.runs.length} runs · Three-cell LTE</p>
+        {hasFilters && <div className="filterbar" aria-label="Scenario filters">
+          <div className="filter-scope"><SlidersHorizontal size={16}/><span>Scenario</span></div>
+          <span className="filter-divider"/>
+          <div className="speed-filter"><span>UE speed</span><div className="segmented" role="group" aria-label="UE speed">
+            {speeds.map(s => <button type="button" key={s} aria-pressed={s === speed} onClick={() => {
+              setSpeed(s);
+              if (rng !== "all" && !data.runs.some(r => r.speed_kmh === s && r.rng_run === Number(rng))) setRng("all");
+            }}>{s} <small>km/h</small></button>)}
+          </div></div>
+          <label className="rng-filter"><span>RNG run</span><span className="select-wrap"><select value={rng} onChange={event => setRng(event.target.value)}>
+            <option value="all">All runs</option>
+            {availableRng.map(n => <option value={n} key={n}>Run {n}</option>)}
+          </select><ChevronDown size={13}/></span></label>
+          <span className="scope-count"><i/>{filtered.length} of {data.runs.length} runs</span>
+        </div>}
+        {page.id === "overview" && <NetworkOverview runs={filtered} summaries={summaries} pingpongWindow={data.metadata.pingpong_window_s}
+          onReplay={openReplay} onCompare={() => navigate("comparison")}/>}
+        <div hidden={page.id !== "topology"}>
+          <NetworkTwin key={replay.revision} runs={data.runs} initialRunId={replay.id} initialTime={replay.time} visible={page.id === "topology"}/>
         </div>
-      </aside>
-
-      <main className="main">
-        <header className="topbar">
-          <div className="breadcrumb">
-            Workspace <ChevronRight size={13} />
-            <strong>{navigation.find(item => item.id === active)?.name ?? "Network Overview"}</strong>
-          </div>
-          <div className="top-right">
-            <span className={`data-tag ${livePage ? "live" : ""}`}>{livePage ? <Activity size={13}/> : <Database size={13}/>}
-              {livePage ? "Live simulation" : "Recorded data"}</span>
-          </div>
-        </header>
-
-        <div className="content">
-          {showFilters && <>
-            <div className="page-heading">
-              <div>
-                <h1>{active === "overview" ? "Network overview" : active === "comparison" ? "Benchmark comparison" : "Handover events"}</h1>
-                <p>{active === "overview" ? "Explore handovers across three LTE cells and three controllers." :
-                  active === "comparison" ? "Compare controller performance at the same speed and RNG run." : "Inspect the recorded event sequence for each controller."}</p>
-              </div>
-              {active !== "events" &&
-              <button className="export-button" onClick={exportCSV}>
-                <Download size={15} /> Export comparison
-              </button>}
-            </div>
-
-            <div className="filterbar">
-              <div className="filter-title"><Activity size={16} /> Scenario</div>
-              <label>
-                UE speed
-                <select value={speed} onChange={(e) => {
-                  const next = Number(e.target.value);
-                  setSpeed(next);
-                  if (run !== "all" && !data.runs.some(r => r.speed_kmh === next && r.rng_run === Number(run))) setRun("all");
-                }}>
-                  {speedOptions.map(s => <option key={s} value={s}>{s} km/h</option>)}
-                </select>
-              </label>
-              <label>
-                RNG run
-                <select value={run} onChange={(e) => setRun(e.target.value)}>
-                  <option value="all">All runs</option>
-                  {runOptions.map(r => <option key={r} value={r}>Run {r}</option>)}
-                </select>
-              </label>
-              <span className="scope-count">{filtered.length} of {data.runs.length} runs</span>
-            </div>
-          </>}
-          <section id="overview" className={`section ${active === "overview" ? "page-active" : "page-hidden"}`}>
-
-            <div className="kpis">
-              <Metric icon={<Database size={18} />} label="Simulation runs"
-                value={String(filtered.length)} detail="Selected configurations" />
-              <Metric icon={<ArrowLeftRight size={18} />} label="Successful handovers"
-                value={String(totalSuccess)} detail="Completed HO events" />
-              <Metric icon={<ShieldCheck size={18} />} label="Logged HO failures"
-                value={String(totalFailures)} detail="Service failures unknown" />
-              <Metric icon={<Zap size={18} />} label="Ping-pong events"
-                value={String(totalPingpong)} detail={`${data.metadata.pingpong_window_s}-second return window`} />
-            </div>
-            <div className="overview-grid">
-              <HandoverTimeline runs={filtered} labels={labels} onReplay={id => {
-                setReplay(r => ({ id, revision: r.revision + 1 }));
-                navigate("topology");
-              }}/>
-              <aside className="overview-summary">
-                <h2>Reception gaps</h2>
-                <p>Mean maximum excess gap per run</p>
-                <div className="gap-list">
-                  {comparison.map(r => <div key={r.policy} className="gap-item">
-                    <div><span>{r.controller}</span><strong>{r.gap.toFixed(1)} <small>ms</small></strong></div>
-                    <meter aria-label={r.controller + " reception gap"} min={0} max={Math.max(1, ...comparison.map(item => item.gap))} value={r.gap}
-                      style={{ "--policy-color": colors[r.policy] } as React.CSSProperties}/>
-                  </div>)}
-                </div>
-                <p className="gap-note">Measured between packet arrivals. Service interruption and packet loss are unverified.</p>
-                <button className="detail-link" onClick={() => navigate("comparison")}>Compare controllers <ChevronRight size={15}/></button>
-              </aside>
-            </div>
-          </section>
-
-
-          <section id="topology" className={`section ${active === "topology" ? "page-active" : "page-hidden"}`}>
-            <div className="section-heading">
-              <h2>Network Topology & Handover Replay</h2>
-              <span>RECORDED SIMULATION</span>
-            </div>
-            <NetworkTwin key={replay.revision} runs={data.runs} initialRunId={replay.id} visible={active === "topology"} />
-          </section>
-          <section id="simulation-control" className={`section ${active === "simulation-control" ? "page-active" : "page-hidden"}`}>
-               <div className="section-heading">
-                  <h2>Live Simulation Control</h2>
-                   <span>NS-3 EXECUTION ENGINE</span>
-                  </div>
-          <SimulationControl />
-         </section>
-          <section id="comparison" className={`section ${active === "comparison" ? "page-active" : "page-hidden"}`}>
-            <div className="section-heading">
-              <h2>Controller Performance</h2>
-              <span>AIORI-3 / COMPARATIVE ANALYSIS</span>
-            </div>
-            <div className="chart-grid">
-              <div className="panel">
-                <div className="panel-heading">
-                  <div>
-                    <h3>Application Throughput</h3>
-                    <p>Mean received payload rate · Mbps</p>
-                  </div>
-                  <span className="panel-label">HIGHER IS BETTER</span>
-                </div>
-                <div className="chart-area">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={comparison} margin={{ top: 8, right: 15, left: -12, bottom: 0 }}>
-                      <CartesianGrid stroke="#30343b" vertical={false} />
-                      <XAxis dataKey="controller" stroke="#9297a2" fontSize={11} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#9297a2" fontSize={11} tickLine={false} axisLine={false} domain={[0, "auto"]} />
-                      <Tooltip contentStyle={tooltipStyle} />
-                      <Bar dataKey="throughput" name="Mbps" radius={[3, 3, 0, 0]}
-                        fill="#58c9da" />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-
-              <div className="panel">
-                <div className="panel-heading">
-                  <div>
-                    <h3>Maximum Excess Reception Gap</h3>
-                    <p>Mean of per-run maxima · milliseconds</p>
-                  </div>
-                  <span className="panel-label">LOWER IS BETTER</span>
-                </div>
-                <div className="chart-area">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={comparison} margin={{ top: 8, right: 15, left: -12, bottom: 0 }}>
-                      <CartesianGrid stroke="#30343b" vertical={false} />
-                      <XAxis dataKey="controller" stroke="#9297a2" fontSize={11} tickLine={false} axisLine={false} />
-                      <YAxis stroke="#9297a2" fontSize={11} tickLine={false} axisLine={false} />
-                      <Tooltip contentStyle={tooltipStyle} />
-                      <Bar dataKey="gap" name="Gap (ms)" fill="#ae91ee" radius={[3, 3, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-
-            <div className="panel table-panel">
-              <div className="panel-heading">
-                <div>
-                  <h3>Policy Comparison</h3>
-                  <p>Measured results for the selected scenario</p>
-                </div>
-              </div>
-              <div className="table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Controller</th>
-                      <th>Throughput</th>
-                      <th>Max excess gap</th>
-                      <th>Successful HOs</th>
-                      <th>HO failures</th>
-                      <th>Ping-pong</th>
-                      <th>Skipped seq.</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comparison.map((r) => (
-                      <tr key={r.policy}>
-                        <td>
-                          <span className="policy-dot" style={{ background: colors[r.policy] }} />
-                          {r.controller}
-                        </td>
-                        <td>{r.throughput.toFixed(4)} Mbps</td>
-                        <td>{r.gap.toFixed(1)} ms</td>
-                        <td>{r.successes}</td>
-                        <td>{r.failures}</td>
-                        <td>{r.pingpong}</td>
-                        <td>{r.skipped}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            {active === "comparison" && <BenchmarkInsights runs={scopeRuns} speed={speed} />}
-</section>
-
-          <section id="events" className={`section ${active === "events" ? "page-active" : "page-hidden"}`}>
-            <div className="section-heading">
-              <h2>Handover Event Explorer</h2>
-              <span>RECORDED LTE RRC EVENTS</span>
-            </div>
-            <div className="panel table-panel">
-              <div className="panel-heading">
-                <div>
-                  <h3>Event History</h3>
-                  <p>Timeline from handover_events.csv</p>
-                </div>
-                <label className="inline-select">
-                  Policy
-                  <select value={policy} onChange={(e) => setPolicy(e.target.value)}>
-                    {policies.map((p) =>
-                      <option key={p} value={p}>{labels[p]}</option>
-                    )}
-                  </select>
-                </label>
-              </div>
-              <div className="table-scroll">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>RNG run</th>
-                      <th>Time</th>
-                      <th>Event</th>
-                      <th>Cell ID</th>
-                      <th>Target cell</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {events.map((e, i) => (
-                      <tr key={`${e.rng_run}-${i}`}>
-                        <td>{e.rng_run}</td>
-                        <td>{e.time_s.toFixed(4)} s</td>
-                        <td><span className={`event-badge ${e.event === "HO_SUCCESS" ? "success" : ""}`}>
-                          {e.event}
-                        </span></td>
-                        <td>{e.cell_id}</td>
-                        <td>{e.target_cell_id ?? "—"}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
-
-          <section id="methodology" className={`section ${active === "methodology" ? "page-active" : "page-hidden"}`}>
-            <div className="section-heading">
-              <h2>Model & Methodology</h2>
-              <span>EXPERIMENTAL DISCLOSURES</span>
-            </div>
-            <div className="panel methodology">
-              <div className="method-item">
-                <h3>Simulation topology</h3>
-                <p>Three LTE eNBs, one moving UE, 30/120 km/h, paired controller settings with RNG runs 11 and 12.</p>
-              </div>
-              <div className="method-item">
-                <h3>Random Forest status</h3>
-                <p>Exploratory model trained on a small related simulation dataset. Predictions and performance have not been independently validated for generalization.</p>
-              </div>
-              <div className="method-item">
-                <h3>Reception gap diagnostic</h3>
-                <p>Positive excess over expected sequence-number spacing at a nominal 10 ms packet interval. Not a direct radio outage measurement.</p>
-              </div>
-              <div className="method-item">
-                <h3>Failure interpretation</h3>
-                <p>Handover failure values reflect logged events only. End-to-end service failure monitoring has not been fully validated.</p>
-              </div>
-            </div>
-          </section>
-          <section
-             id="model-evaluation"
-             className={`section ${active === "model-evaluation" ? "page-active" : "page-hidden"}`}
-            >
-           <ModelEvaluation />
-           </section>
-          <footer>AIORI-3 · PS-016 <span>MOBI-HO Lab</span></footer>
-        </div>
-      </main>
-    </div>
-  );
+        {page.id === "comparison" && <BenchmarkInsights runs={sameRng} speed={speed} summaries={summaries}/>}
+        {page.id === "events" && <Events runs={filtered} onReplay={openReplay}/>}
+        {page.id === "methodology" && <Methodology benchmark={data}/>}
+        {page.id === "model-evaluation" && <ModelEvaluation/>}
+        <div hidden={page.id !== "simulation-control"}><SimulationControl/></div>
+        <footer className="workspace-footer"><span><Radio size={13}/>MOBI-HO Lab</span><span>AIORI-3 <i/> PS-016</span></footer>
+      </div>
+    </main>
+  </div>;
 }
-
-const tooltipStyle = {
-  backgroundColor: "#22252b",
-  border: "1px solid #40434a",
-  borderRadius: "5px",
-  color: "#f1f2f4",
-};
-
-function Metric({
-  icon, label, value, detail
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  detail: string;
-}) {
-  return (
-    <div className="metric">
-      <div className="metric-head">{icon}<span>{label}</span></div>
-      <div className="metric-value">{value}</div>
-      <div className="metric-detail">{detail}</div>
-    </div>
-  );
-}
-

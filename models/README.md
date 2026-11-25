@@ -1,4 +1,9 @@
-# RF integration artifacts
+# Handover model artifacts
+
+[XGBoost and Logistic Regression prototypes](handover-prototypes-v1/README.md)
+use the same pilot data as the RF prototype. Their browser demo is under
+**Model evaluation**. The model folder contains the standalone C++ inference
+header and parity checker for simulator integration.
 
 [rf-prototype-v1/JOE_INTEGRATION.md](rf-prototype-v1/JOE_INTEGRATION.md) is the
 handoff for the first real-data RF integration prototype. The folder preserves

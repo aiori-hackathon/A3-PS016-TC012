@@ -1,6 +1,7 @@
 import DonutBreakdown from "./DonutBreakdown";
 import { useEffect, useMemo, useState } from "react";
 import { BrainCircuit, CheckCircle2, Clock3 } from "lucide-react";
+import { loadRecordedData } from "../recordedData";
 
 type Decision = {
   time_s: number;
@@ -21,6 +22,8 @@ type Props = {
   replayTime: number;
 };
 
+const api = import.meta.env.VITE_API_BASE_URL;
+
 export default function RFDecisionInspector({
   selectedRunId,
   replayTime,
@@ -29,15 +32,13 @@ export default function RFDecisionInspector({
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/rf-decisions` : `${import.meta.env.BASE_URL}rf_decisions.json`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("RF decision export is missing");
-        }
-        return response.json() as Promise<DecisionData>;
-      })
-      .then(setData)
-      .catch((err) => setError(String(err)));
+    const abort = new AbortController();
+    loadRecordedData<DecisionData>(`${import.meta.env.BASE_URL}rf_decisions.json`, abort.signal, api ? `${api}/api/rf-decisions` : undefined)
+      .then(({ data: decisions }) => setData(decisions))
+      .catch(() => {
+        if (!abort.signal.aborted) setError("Recorded RF decisions could not be loaded. Reload the page to try again.");
+      });
+    return () => abort.abort();
   }, []);
 
   const decisions = useMemo(

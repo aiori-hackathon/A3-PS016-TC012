@@ -48,7 +48,7 @@ export default function DonutBreakdown({
                 outerRadius={91}
                 paddingAngle={visible.length > 1 ? 3 : 0}
                 stroke="none"
-                isAnimationActive={true}
+                isAnimationActive={false}
               >
                 {visible.map((item) => (
                   <Cell key={item.name} fill={item.color} />
