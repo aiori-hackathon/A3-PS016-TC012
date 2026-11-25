@@ -24,6 +24,7 @@ export type Benchmark = {
 export const policyLabels = controllerName;
 
 export const policyColors: Record<string, string> = {
+  xgboost: "#f5b76b", logistic: "#ee90ab",
   a3: "#65dcd2",
   rule: "#89b2f2",
   ml: "#b29af4",

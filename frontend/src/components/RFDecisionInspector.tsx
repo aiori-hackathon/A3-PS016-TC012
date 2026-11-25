@@ -33,7 +33,7 @@ export default function RFDecisionInspector({
 
   useEffect(() => {
     const abort = new AbortController();
-    loadRecordedData<DecisionData>(`${import.meta.env.BASE_URL}rf_decisions.json`, abort.signal, api ? `${api}/api/rf-decisions` : undefined)
+    loadRecordedData<DecisionData>(`${api ?? "http://127.0.0.1:8000"}/api/rf-decisions`, abort.signal)
       .then(({ data: decisions }) => setData(decisions))
       .catch(() => {
         if (!abort.signal.aborted) setError("Recorded RF decisions could not be loaded. Reload the page to try again.");

@@ -3,7 +3,7 @@ import { Activity, AlertTriangle, ArrowLeftRight, ArrowUpRight, Check, ChevronDo
 import { controllerName } from "./recordedReplay";
 import "./inspection.css";
 
-type Controller = "a3" | "rule" | "ml";
+type Controller = "a3" | "rule" | "ml" | "xgboost" | "logistic";
 type JobStatus = "queued" | "running" | "completed" | "failed";
 type JobResult = {
   controller: Controller;
@@ -34,7 +34,7 @@ function JobOutput({ result }: { result: JobResult }) {
   ] as const;
   return <section className="inspect-card sim-output">
     <div className="inspect-head"><h2><ArrowLeftRight size={17}/>Job results</h2>
-      <span className="inspect-aside">{controllerName[result.controller]} · {result.speed_kmh} km/h · Run {result.rng_run}</span>
+      <span className="inspect-aside">{result.controller === "xgboost" ? "XGBoost" : result.controller === "logistic" ? "Logistic Regression" : controllerName[result.controller]} · {result.speed_kmh} km/h · Run {result.rng_run}</span>
     </div>
     <div className="sim-metrics">
       {metrics.map(([name, value]) => <div key={name}><span>{name}</span><strong>{value.toLocaleString()}</strong></div>)}
@@ -134,6 +134,8 @@ export default function SimulationControl() {
           <label className="sim-controller">Handover controller
             <select value={controller} onChange={e => setController(e.target.value as Controller)}>
               <option value="a3">A3-RSRP</option><option value="rule">Rule-based</option><option value="ml">Random Forest</option>
+              <option value="xgboost">XGBoost</option>
+              <option value="logistic">Logistic Regression</option>
             </select>
           </label>
           <label>UE speed<select value={speed} onChange={e => setSpeed(Number(e.target.value))}>

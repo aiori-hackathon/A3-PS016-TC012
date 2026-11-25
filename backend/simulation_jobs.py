@@ -19,6 +19,8 @@ PROGRAMS = {
     "a3": "mobi-ho-integrated",
     "rule": "mobi-ho-rf",
     "ml": "mobi-ho-rf-live",
+    "xgboost": "mobi-ho-xgboost-live",
+    "logistic": "mobi-ho-logistic-live",
 }
 
 OUTPUT_FILES = (
@@ -40,7 +42,7 @@ jobs = {}
 class SimulationRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    controller: Literal["a3", "rule", "ml"]
+    controller: Literal["a3", "rule", "ml", "xgboost", "logistic"]
     speed_kmh: Literal[30, 120]
     rng_run: Literal[11, 12]
 
@@ -65,7 +67,7 @@ def execute_job(job_id, config):
         "--disableDl=0 "
         "--disableUl=0"
     )
-    if config.controller == "ml":
+    if config.controller in {"ml", "xgboost", "logistic"}:
         options += " --pilotAction=none"
 
     command = ["./ns3", "run", options]
@@ -109,6 +111,17 @@ def execute_job(job_id, config):
                 )
 
             shutil.copy2(source, folder / filename)
+
+        if config.controller in {"xgboost", "logistic"}:
+            decisions = [
+                line for line in completed.stdout.splitlines()
+                if "MODEL AUTONOMOUS" in line or "MODEL REQUEST" in line
+            ]
+            (folder / "model_decisions.log").write_text("\n".join(decisions) + "\n")
+            trace = NS3 / "handovers.csv"
+            if not trace.is_file() or trace.stat().st_mtime < started - 2:
+                raise RuntimeError("Model handover trace missing or stale")
+            shutil.copy2(trace, folder / "handovers.csv")
 
         events = read_csv(folder / "handover_events.csv")
         packets = read_csv(folder / "packets.csv")

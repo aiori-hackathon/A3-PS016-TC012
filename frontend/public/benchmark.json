@@ -133,16 +133,16 @@
       ]
     },
     {
-      "id": "rule_speed30_run11",
-      "controller": "rule",
+      "id": "logistic_speed30_run11",
+      "controller": "logistic",
       "speed_kmh": 30,
       "rng_run": 11,
-      "throughput_mbps": 3.233984,
+      "throughput_mbps": 3.237811,
       "ho_successes": 2,
       "ho_failures": 0,
-      "max_excess_gap_ms": 100.0,
-      "gaps_over_5ms": 36,
-      "skipped_sequences": 30,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 8,
+      "skipped_sequences": 4,
       "pingpong": 0,
       "pingpong_1s": 0,
       "events": [
@@ -153,25 +153,25 @@
           "target_cell_id": null
         },
         {
-          "time_s": 14.905,
+          "time_s": 12.305,
           "cell_id": 1,
           "event": "HO_START",
           "target_cell_id": 2
         },
         {
-          "time_s": 14.908214,
+          "time_s": 12.308214,
           "cell_id": 2,
           "event": "HO_SUCCESS",
           "target_cell_id": null
         },
         {
-          "time_s": 38.705,
+          "time_s": 36.305,
           "cell_id": 2,
           "event": "HO_START",
           "target_cell_id": 3
         },
         {
-          "time_s": 38.708214,
+          "time_s": 36.308214,
           "cell_id": 3,
           "event": "HO_SUCCESS",
           "target_cell_id": null
@@ -225,6 +225,98 @@
       ]
     },
     {
+      "id": "rule_speed30_run11",
+      "controller": "rule",
+      "speed_kmh": 30,
+      "rng_run": 11,
+      "throughput_mbps": 3.233984,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 36,
+      "skipped_sequences": 30,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 14.905,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 14.908214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 38.705,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 38.708214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "xgboost_speed30_run11",
+      "controller": "xgboost",
+      "speed_kmh": 30,
+      "rng_run": 11,
+      "throughput_mbps": 3.237811,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 8,
+      "skipped_sequences": 4,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 12.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 12.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 36.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 36.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
       "id": "a3_speed30_run12",
       "controller": "a3",
       "speed_kmh": 30,
@@ -271,16 +363,16 @@
       ]
     },
     {
-      "id": "rule_speed30_run12",
-      "controller": "rule",
+      "id": "logistic_speed30_run12",
+      "controller": "logistic",
       "speed_kmh": 30,
       "rng_run": 12,
-      "throughput_mbps": 3.234278,
+      "throughput_mbps": 3.237222,
       "ho_successes": 2,
       "ho_failures": 0,
-      "max_excess_gap_ms": 100.0,
-      "gaps_over_5ms": 13,
-      "skipped_sequences": 28,
+      "max_excess_gap_ms": 22.0,
+      "gaps_over_5ms": 8,
+      "skipped_sequences": 8,
       "pingpong": 0,
       "pingpong_1s": 0,
       "events": [
@@ -291,25 +383,25 @@
           "target_cell_id": null
         },
         {
-          "time_s": 14.905,
+          "time_s": 12.305,
           "cell_id": 1,
           "event": "HO_START",
           "target_cell_id": 2
         },
         {
-          "time_s": 14.908214,
+          "time_s": 12.308214,
           "cell_id": 2,
           "event": "HO_SUCCESS",
           "target_cell_id": null
         },
         {
-          "time_s": 38.705,
+          "time_s": 36.305,
           "cell_id": 2,
           "event": "HO_START",
           "target_cell_id": 3
         },
         {
-          "time_s": 38.708214,
+          "time_s": 36.308214,
           "cell_id": 3,
           "event": "HO_SUCCESS",
           "target_cell_id": null
@@ -363,6 +455,98 @@
       ]
     },
     {
+      "id": "rule_speed30_run12",
+      "controller": "rule",
+      "speed_kmh": 30,
+      "rng_run": 12,
+      "throughput_mbps": 3.234278,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 100.0,
+      "gaps_over_5ms": 13,
+      "skipped_sequences": 28,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 14.905,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 14.908214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 38.705,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 38.708214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "xgboost_speed30_run12",
+      "controller": "xgboost",
+      "speed_kmh": 30,
+      "rng_run": 12,
+      "throughput_mbps": 3.237222,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 22.0,
+      "gaps_over_5ms": 8,
+      "skipped_sequences": 8,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 12.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 12.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 36.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 36.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
       "id": "a3_speed120_run11",
       "controller": "a3",
       "speed_kmh": 120,
@@ -402,6 +586,98 @@
         },
         {
           "time_s": 10.301214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "logistic_speed120_run11",
+      "controller": "logistic",
+      "speed_kmh": 120,
+      "rng_run": 11,
+      "throughput_mbps": 3.236151,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 8,
+      "skipped_sequences": 4,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 3.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 3.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 9.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 9.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "ml_speed120_run11",
+      "controller": "ml",
+      "speed_kmh": 120,
+      "rng_run": 11,
+      "throughput_mbps": 3.236151,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 4,
+      "skipped_sequences": 4,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 3.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 3.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 9.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 9.308214,
           "cell_id": 3,
           "event": "HO_SUCCESS",
           "target_cell_id": null
@@ -455,15 +731,15 @@
       ]
     },
     {
-      "id": "ml_speed120_run11",
-      "controller": "ml",
+      "id": "xgboost_speed120_run11",
+      "controller": "xgboost",
       "speed_kmh": 120,
       "rng_run": 11,
       "throughput_mbps": 3.236151,
       "ho_successes": 2,
       "ho_failures": 0,
       "max_excess_gap_ms": 20.0,
-      "gaps_over_5ms": 4,
+      "gaps_over_5ms": 8,
       "skipped_sequences": 4,
       "pingpong": 0,
       "pingpong_1s": 0,
@@ -547,6 +823,98 @@
       ]
     },
     {
+      "id": "logistic_speed120_run12",
+      "controller": "logistic",
+      "speed_kmh": 120,
+      "rng_run": 12,
+      "throughput_mbps": 3.233902,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 22.0,
+      "gaps_over_5ms": 8,
+      "skipped_sequences": 8,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 3.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 3.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 9.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 9.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
+      "id": "ml_speed120_run12",
+      "controller": "ml",
+      "speed_kmh": 120,
+      "rng_run": 12,
+      "throughput_mbps": 3.233902,
+      "ho_successes": 2,
+      "ho_failures": 0,
+      "max_excess_gap_ms": 20.0,
+      "gaps_over_5ms": 4,
+      "skipped_sequences": 8,
+      "pingpong": 0,
+      "pingpong_1s": 0,
+      "events": [
+        {
+          "time_s": 0.028,
+          "cell_id": 1,
+          "event": "CONNECTION_ESTABLISHED",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 3.305,
+          "cell_id": 1,
+          "event": "HO_START",
+          "target_cell_id": 2
+        },
+        {
+          "time_s": 3.308214,
+          "cell_id": 2,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        },
+        {
+          "time_s": 9.305,
+          "cell_id": 2,
+          "event": "HO_START",
+          "target_cell_id": 3
+        },
+        {
+          "time_s": 9.308214,
+          "cell_id": 3,
+          "event": "HO_SUCCESS",
+          "target_cell_id": null
+        }
+      ]
+    },
+    {
       "id": "rule_speed120_run12",
       "controller": "rule",
       "speed_kmh": 120,
@@ -593,15 +961,15 @@
       ]
     },
     {
-      "id": "ml_speed120_run12",
-      "controller": "ml",
+      "id": "xgboost_speed120_run12",
+      "controller": "xgboost",
       "speed_kmh": 120,
       "rng_run": 12,
       "throughput_mbps": 3.233902,
       "ho_successes": 2,
       "ho_failures": 0,
-      "max_excess_gap_ms": 20.0,
-      "gaps_over_5ms": 4,
+      "max_excess_gap_ms": 22.0,
+      "gaps_over_5ms": 8,
       "skipped_sequences": 8,
       "pingpong": 0,
       "pingpong_1s": 0,

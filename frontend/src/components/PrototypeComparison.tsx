@@ -14,7 +14,7 @@ export default function PrototypeComparison() {
 
   useEffect(() => {
     const abort = new AbortController();
-    fetch(`${import.meta.env.BASE_URL}handover-prototypes.json`, { signal: abort.signal })
+    fetch(`${import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"}/api/handover-prototypes`, { signal: abort.signal })
       .then(response => {
         if (!response.ok) throw new Error("Model artifact unavailable");
         return response.json() as Promise<PrototypeBundle>;
@@ -33,7 +33,7 @@ export default function PrototypeComparison() {
   const observed = bundle && preset !== "" ? bundle.examples[Number(preset)].class_counts : null;
 
   return <section className="inspect-card prototype-comparison">
-    <div className="inspect-head"><h2><FlaskConical size={17}/>Try the handover models</h2><span className="inspect-aside">Integration prototypes</span></div>
+    <div className="inspect-head"><h2><FlaskConical size={17}/>XGBoost and Logistic Regression</h2><span className="inspect-aside">Integration prototypes</span></div>
     {!bundle ? <p className="prototype-intro" role={unavailable ? "alert" : "status"}>{unavailable ? "The prototype model file could not be loaded." : "Loading models…"}</p> : <>
       <p className="prototype-intro">Both models use {bundle.training_rows} paired labels over {bundle.unique_feature_vectors} unique inputs ({bundle.class_counts["0"]} STAY, {bundle.class_counts["1"]} HANDOVER). Independent validation is pending.</p>
       <form className="prototype-form" onSubmit={event => { event.preventDefault(); setSubmitted(true); }}>
