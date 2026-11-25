@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Download, Radio, RotateCcw, SlidersHorizontal } from "lucide-react";
 import { type Benchmark, exportComparison, summarizeControllers } from "./benchmark";
 import { pageFromHash, type PageId } from "./pages";
+import { loadRecordedData } from "./recordedData";
 import WorkspaceNav from "./components/WorkspaceNav";
 import NetworkOverview from "./components/NetworkOverview";
 import NetworkTwin from "./components/NetworkTwin";
@@ -16,6 +17,7 @@ const api = import.meta.env.VITE_API_BASE_URL;
 
 export default function App() {
   const [data, setData] = useState<Benchmark | null>(null);
+  const [apiConnected, setApiConnected] = useState(false);
   const [error, setError] = useState("");
   const [reload, setReload] = useState(0);
   const [speed, setSpeed] = useState(120);
@@ -26,13 +28,10 @@ export default function App() {
 
   useEffect(() => {
     const abort = new AbortController();
-    fetch(api ? `${api}/api/benchmark` : `${import.meta.env.BASE_URL}benchmark.json`, { signal: abort.signal })
-      .then(response => {
-        if (!response.ok) throw new Error(`Benchmark request returned HTTP ${response.status}`);
-        return response.json() as Promise<Benchmark>;
-      })
-      .then(benchmark => {
+    loadRecordedData<Benchmark>(`${import.meta.env.BASE_URL}benchmark.json`, abort.signal, api ? `${api}/api/benchmark` : undefined)
+      .then(({ data: benchmark, source }) => {
         setData(benchmark);
+        setApiConnected(source === "api");
         setSpeed(current => benchmark.runs.some(r => r.speed_kmh === current) ? current : benchmark.runs[0]?.speed_kmh ?? current);
       })
       .catch((err: Error) => { if (!abort.signal.aborted) setError(err.message); });
@@ -77,7 +76,7 @@ export default function App() {
   const hasFilters = ["overview", "comparison", "events"].includes(page.id);
 
   return <div className="shell">
-    <WorkspaceNav page={page} navigate={navigate} apiConnected={Boolean(api)} runCount={data.runs.length}/>
+    <WorkspaceNav page={page} navigate={navigate} apiConnected={apiConnected} runCount={data.runs.length}/>
     <main className="main" id="workspace-content" ref={mainRef} tabIndex={-1}>
       <div className="content">
         <div className="page-heading" key={page.id}>
