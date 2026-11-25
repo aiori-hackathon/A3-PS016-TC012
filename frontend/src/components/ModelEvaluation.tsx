@@ -1,20 +1,6 @@
-
 import { useEffect, useState } from "react";
-import {
-  AlertTriangle,
-  CheckCircle2,
-  ShieldAlert,
-  Cpu,
-} from "lucide-react";
-import {
-  BarChart,
-  Bar,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { AlertTriangle, Binary, BookOpen, ChartBar, ChevronDown, Cpu, Grid2X2, Layers3, LoaderCircle, SlidersHorizontal } from "lucide-react";
+import "./inspection.css";
 
 type Metrics = {
   accuracy: number;
@@ -23,10 +9,8 @@ type Metrics = {
   handover_recall: number;
   handover_f1: number;
   brier_score: number;
-  confusion_matrix_rows_true_columns_predicted_stay_handover:
-    number[][];
+  confusion_matrix_rows_true_columns_predicted_stay_handover: number[][];
 };
-
 type ModelReport = {
   model_id: string;
   model_status: string;
@@ -42,349 +26,123 @@ type ModelReport = {
   hyperparameter_search_performed: boolean;
   threshold_tuned: boolean;
   limitations: string[];
-  input_ranges: Record<
-    string,
-    { min: number; max: number }
-  >;
+  input_ranges: Record<string, { min: number; max: number }>;
 };
 
-function percent(value: number) {
-  return `${(value * 100).toFixed(2)}%`;
-}
+const actions = ["STAY", "HANDOVER"];
+const cellNames = [["True negative", "False positive"], ["False negative", "True positive"]];
+const classificationMetrics = [
+  ["Accuracy", "accuracy"], ["Balanced accuracy", "balanced_accuracy"],
+  ["HANDOVER precision", "handover_precision"], ["HANDOVER recall", "handover_recall"],
+  ["HANDOVER F1", "handover_f1"], ["Brier score", "brier_score"],
+] as const;
 
-function MetricCard({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="eval-metric">
-      <span>{label}</span>
-      <strong>{value}</strong>
-      <small>Training-data fit only</small>
+function ConfusionMatrix({ matrix }: { matrix: number[][] }) {
+  const [asPercentage, setAsPercentage] = useState(false);
+  const valid = Array.isArray(matrix) && matrix.length === 2 &&
+    matrix.every(row => Array.isArray(row) && row.length === 2 && row.every(n => Number.isFinite(n) && n >= 0));
+  return <section className="inspect-card eval-matrix-card">
+    <div className="inspect-head"><h2><Grid2X2 size={17}/>Confusion matrix</h2>
+      {valid && <div className="eval-segmented" role="group" aria-label="Confusion matrix unit">
+        <button type="button" aria-pressed={!asPercentage} onClick={() => setAsPercentage(false)}>Count</button>
+        <button type="button" aria-pressed={asPercentage} onClick={() => setAsPercentage(true)}>Row %</button>
+      </div>}
     </div>
-  );
+    {valid ? <div className="eval-matrix-body">
+      <table className="eval-matrix" aria-label={asPercentage ? "Percentage of each actual class by prediction" : "Training observations by actual class and prediction"}>
+        <thead><tr><th scope="col">Actual ↓</th>{actions.map(action => <th key={action} scope="col">Pred. {action}</th>)}</tr></thead>
+        <tbody>{matrix.map((row, actual) => {
+          const total = row.reduce((sum, count) => sum + count, 0);
+          return <tr key={actions[actual]}><th scope="row">{actions[actual]}</th>{row.map((value, predicted) =>
+            <td key={actions[predicted]} className={actual === predicted ? "eval-agrees" : "eval-differs"}>
+              <strong key={String(asPercentage)}>{asPercentage ? total ? `${(value / total * 100).toFixed(1)}%` : "—" : value}</strong>
+              <small>{cellNames[actual][predicted]}</small>
+            </td>)}</tr>;
+        })}</tbody>
+      </table>
+    </div> : <p className="inspect-empty">The report contains no usable confusion matrix.</p>}
+  </section>;
 }
 
 export default function ModelEvaluation() {
   const [report, setReport] = useState<ModelReport | null>(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(true);
-
+  const [request, setRequest] = useState(0);
   useEffect(() => {
-    const controller = new AbortController();
-
-    fetch(`${import.meta.env.BASE_URL}model_evaluation.json`, {
-      signal: controller.signal,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Report HTTP ${response.status}`);
-        }
+    const abort = new AbortController();
+    fetch(`${import.meta.env.BASE_URL}model_evaluation.json`, { signal: abort.signal })
+      .then(response => {
+        if (!response.ok) throw new Error(`Report returned HTTP ${response.status}.`);
         return response.json() as Promise<ModelReport>;
       })
-      .then((data) => {
-        setReport(data);
-        setLoading(false);
-      })
-      .catch((err: unknown) => {
-        if (controller.signal.aborted) return;
-        setError(String(err));
-        setLoading(false);
-      });
+      .then(setReport)
+      .catch((err: unknown) => { if (!abort.signal.aborted) setError(err instanceof Error ? err.message : String(err)); });
+    return () => abort.abort();
+  }, [request]);
 
-    return () => controller.abort();
-  }, []);
-
-  if (loading) {
-    return <div className="eval-panel">Loading model report…</div>;
-  }
-
-  if (error || !report) {
-    return (
-      <div className="eval-panel eval-warning">
-        Unable to load model evaluation: {error}
-      </div>
-    );
-  }
+  if (error) return <div className="inspection-pages"><div className="inspect-notice" role="alert">
+    <AlertTriangle size={18}/><div><strong>Model report unavailable</strong><p>{error}</p>
+      <button type="button" className="inspect-link" onClick={() => { setError(""); setRequest(n => n + 1); }}>Try again</button>
+    </div></div></div>;
+  if (!report) return <div className="inspection-pages"><div className="inspect-loading" role="status">
+    <LoaderCircle size={18} className="inspect-spin"/>Loading the saved model report…
+  </div></div>;
 
   const metrics = report.training_resubstitution_metrics_only;
-  const matrix =
-    metrics.confusion_matrix_rows_true_columns_predicted_stay_handover;
-
-  const matrixValid =
-    matrix.length === 2 &&
-    matrix.every(row => row.length === 2);
-
-  const classData = [
-    { name: "STAY", count: report.class_counts["0"] ?? 0 },
-    { name: "HANDOVER", count: report.class_counts["1"] ?? 0 },
-  ];
-
-  const noIndependentValidation =
-    report.independent_validation_available === false;
-
-  return (
-    <div className="model-evaluation">
-      <div className="eval-heading">
-        <div>
-          <h2>Random Forest · Model Evaluation & Health</h2>
-          <p>
-            Actual saved model report · reproducible training diagnostics
-          </p>
-        </div>
-        <span className="eval-version">RF PROTOTYPE V1</span>
-      </div>
-
-      <div className="eval-warning">
-        <AlertTriangle size={20} />
-        <div>
-          <strong>Independent validation not available</strong>
-          <p>
-            All classification metrics below were computed on the
-            same observations used to fit the model. They must not
-            be presented as accuracy on unseen data or proof of
-            improved handover performance.
-          </p>
-        </div>
-      </div>
-
-      <div className="eval-heading-secondary">
-        <h3>Classification Diagnostics</h3>
-        <span>TRAINING RESUBSTITUTION</span>
-      </div>
-
-      <div className="eval-metric-grid">
-        <MetricCard
-          label="Training Accuracy"
-          value={percent(metrics.accuracy)}
-        />
-        <MetricCard
-          label="Balanced Accuracy"
-          value={percent(metrics.balanced_accuracy)}
-        />
-        <MetricCard
-          label="HANDOVER Precision"
-          value={percent(metrics.handover_precision)}
-        />
-        <MetricCard
-          label="HANDOVER Recall"
-          value={percent(metrics.handover_recall)}
-        />
-        <MetricCard
-          label="HANDOVER F1"
-          value={percent(metrics.handover_f1)}
-        />
-        <MetricCard
-          label="Training Brier Score"
-          value={metrics.brier_score.toFixed(4)}
-        />
-      </div>
-
-      <div className="eval-two-column">
-        <div className="eval-panel">
-          <h3>Confusion Matrix</h3>
-          <p>
-            Training observations · rows are actual labels,
-            columns are predicted labels
-          </p>
-
-          {matrixValid ? (
-            <div className="eval-matrix">
-              <div />
-              <div className="eval-matrix-label">Predicted STAY</div>
-              <div className="eval-matrix-label">Predicted HANDOVER</div>
-
-              <div className="eval-matrix-label">Actual STAY</div>
-              <div className="eval-cell eval-correct">
-                <strong>{matrix[0][0]}</strong>
-                <span>True Negative</span>
-              </div>
-              <div className="eval-cell eval-incorrect">
-                <strong>{matrix[0][1]}</strong>
-                <span>False Positive</span>
-              </div>
-
-              <div className="eval-matrix-label">Actual HANDOVER</div>
-              <div className="eval-cell eval-incorrect">
-                <strong>{matrix[1][0]}</strong>
-                <span>False Negative</span>
-              </div>
-              <div className="eval-cell eval-correct">
-                <strong>{matrix[1][1]}</strong>
-                <span>True Positive</span>
-              </div>
-            </div>
-          ) : (
-            <p>Confusion matrix is unavailable or malformed.</p>
-          )}
-        </div>
-
-        <div className="eval-panel">
-          <h3>Training Class Distribution</h3>
-          <p>
-            Actual labeled samples used for model fitting
-          </p>
-          <div className="eval-chart">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={classData}>
-                <CartesianGrid
-                  stroke="#35404d"
-                  vertical={false}
-                />
-                <XAxis
-                  dataKey="name"
-                  stroke="#a7b4c3"
-                  fontSize={11}
-                />
-                <YAxis
-                  stroke="#a7b4c3"
-                  fontSize={11}
-                  allowDecimals={false}
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: "#222a34",
-                    border: "1px solid #475365",
-                    color: "#f2f6fb",
-                  }}
-                />
-                <Bar
-                  dataKey="count"
-                  name="Training samples"
-                  fill="#55c1dc"
-                  radius={[4, 4, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
+  const stay = report.class_counts["0"] ?? 0;
+  const handover = report.class_counts["1"] ?? 0;
+  const total = stay + handover;
+  const inputs = Object.entries(report.input_ranges);
+  return <div className="inspection-pages model-evaluation">
+    <div className="inspect-notice"><BookOpen size={17}/><div>
+      <strong>Random Forest · training-set evaluation</strong>
+      <p>These scores describe the {report.training_rows} observations used to fit the prototype.
+        {" "}{report.independent_validation_available ? "Independent validation is recorded separately." : "Independent validation is pending."}</p>
+    </div></div>
+    <section className="inspect-card eval-scores" aria-label="Training-set classification metrics">
+      <div className="inspect-head"><h2><ChartBar size={17}/>Classification metrics</h2><span className="inspect-aside">Training set</span></div>
+      <div className="eval-metric-grid">{classificationMetrics.map(([label, key]) =>
+        <div className="eval-metric" key={key}><span>{label}</span>
+          <strong>{key === "brier_score" ? metrics[key].toFixed(4) : `${(metrics[key] * 100).toFixed(2)}%`}</strong>
+        </div>)}</div>
+    </section>
+    <div className="eval-pair">
+      <ConfusionMatrix matrix={metrics.confusion_matrix_rows_true_columns_predicted_stay_handover}/>
+      <section className="inspect-card">
+        <div className="inspect-head"><h2><Layers3 size={17}/>Training data</h2></div>
+        <div className="eval-training-body">
+          <dl className="eval-counts">
+            <div><dt>Labelled observations</dt><dd>{report.training_rows}</dd></div>
+            <div><dt>Unique input vectors</dt><dd>{report.unique_feature_vectors}</dd></div>
+          </dl>
+          <div className="eval-distribution" aria-hidden="true">
+            <i style={{ width: `${total ? stay / total * 100 : 0}%` }}/><i style={{ width: `${total ? handover / total * 100 : 0}%` }}/>
           </div>
-          <p className="eval-note">
-            Only {report.unique_feature_vectors} unique feature
-            vectors across {report.training_rows} observations.
-            The single STAY example makes generalization
-            especially uncertain.
-          </p>
+          <div className="eval-class-labels"><span><i/>STAY <strong>{stay}</strong></span><span><i/>HANDOVER <strong>{handover}</strong></span></div>
         </div>
-      </div>
-
-      <div className="eval-heading-secondary">
-        <h3>Model Health & Readiness</h3>
-        <span>ARTIFACT AND VALIDATION STATUS</span>
-      </div>
-
-      <div className="eval-health-grid">
-        <div className="eval-health">
-          <CheckCircle2 color="#63d4ae" size={19} />
-          <div>
-            <strong>Model Artifact</strong>
-            <span>Available · RF prototype v1</span>
-          </div>
-        </div>
-
-        <div className="eval-health">
-          <Cpu color="#63d4ae" size={19} />
-          <div>
-            <strong>JSON / sklearn parity</strong>
-            <span>
-              Maximum absolute error:
-              {" "}{report.json_sklearn_max_absolute_error.toExponential(2)}
-            </span>
-          </div>
-        </div>
-
-        <div className="eval-health">
-          <ShieldAlert color="#f0bb70" size={19} />
-          <div>
-            <strong>Independent validation</strong>
-            <span>
-              {noIndependentValidation
-                ? "Not available"
-                : "See validation report"}
-            </span>
-          </div>
-        </div>
-
-        <div className="eval-health">
-          <ShieldAlert color="#f0bb70" size={19} />
-          <div>
-            <strong>Class balance</strong>
-            <span>
-              {classData[0].count} STAY /
-              {" "}{classData[1].count} HANDOVER
-            </span>
-          </div>
-        </div>
-
-        <div className="eval-health">
-          <ShieldAlert color="#f0bb70" size={19} />
-          <div>
-            <strong>Held-out test evaluation</strong>
-            <span>
-              {report.test_metrics === null
-                ? "Not available"
-                : "Results recorded"}
-            </span>
-          </div>
-        </div>
-
-        <div className="eval-health">
-          <Cpu color="#8ba8cb" size={19} />
-          <div>
-            <strong>C++ parity report</strong>
-            <span>{report.cpp_compile_and_parity}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="eval-panel">
-        <h3>Training Feature Ranges</h3>
-        <p>
-          Recorded training coverage. These ranges are not
-          live input-drift measurements.
-        </p>
-
-        <div className="table-scroll">
-          <table className="eval-table">
-            <thead>
-              <tr>
-                <th>Input feature</th>
-                <th>Minimum</th>
-                <th>Maximum</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(report.input_ranges).map(
-                ([name, range]) => (
-                  <tr key={name}>
-                    <td>{name}</td>
-                    <td>{range.min.toFixed(3)}</td>
-                    <td>{range.max.toFixed(3)}</td>
-                  </tr>
-                )
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className="eval-warning">
-        <AlertTriangle size={19} />
-        <div>
-          <strong>Research limitation</strong>
-          <p>
-            This prototype was trained on 16 paired-outcome rows
-            with four distinct feature vectors. There is no
-            independent evaluation set, no validated probability
-            calibration, and no established real-world
-            performance guarantee.
-          </p>
-          <p className="eval-model-id">
-            Model ID: {report.model_id}
-          </p>
-        </div>
-      </div>
+      </section>
     </div>
-  );
+    <section className="inspect-card">
+      <div className="inspect-head"><h2><Cpu size={17}/>Model artifact</h2></div>
+      <dl className="eval-provenance">
+        <div><dt>Model ID</dt><dd><code>{report.model_id}</code></dd></div>
+        <div><dt>Artifact status</dt><dd>{report.model_status.replaceAll("_", " ")}</dd></div>
+        <div><dt>Validation metrics</dt><dd>{report.validation_metrics === null ? "Unavailable" : "Recorded"}</dd></div>
+        <div><dt>Held-out test metrics</dt><dd>{report.test_metrics === null ? "Unavailable" : "Recorded"}</dd></div>
+        <div><dt>JSON / sklearn parity</dt><dd>{report.json_sklearn_max_absolute_error.toExponential(2)} max. absolute difference</dd></div>
+        <div><dt>C++ parity report</dt><dd>{report.cpp_compile_and_parity}</dd></div>
+      </dl>
+      <details className="inspect-details">
+        <summary><span><SlidersHorizontal size={15}/>Training feature ranges</span><span>{inputs.length} inputs <ChevronDown size={14}/></span></summary>
+        <div className="inspect-table-wrap" role="region" aria-label="Training feature ranges" tabIndex={0}><table>
+          <thead><tr><th>Input feature</th><th>Minimum</th><th>Maximum</th></tr></thead>
+          <tbody>{inputs.map(([name, range]) => <tr key={name}><td><code>{name}</code></td><td>{range.min.toFixed(3)}</td><td>{range.max.toFixed(3)}</td></tr>)}</tbody>
+        </table></div>
+      </details>
+      {report.limitations.length > 0 && <details className="inspect-details">
+        <summary><span><Binary size={15}/>Evaluation limitations</span><ChevronDown size={14}/></summary>
+        <ul className="eval-limitations">{report.limitations.map((item, i) => <li key={i}>{item}</li>)}</ul>
+      </details>}
+    </section>
+  </div>;
 }

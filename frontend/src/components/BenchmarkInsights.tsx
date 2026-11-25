@@ -1,300 +1,70 @@
+import { useState } from "react";
+import { ChartNoAxesCombined, Table2 } from "lucide-react";
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { policyColors, type BenchmarkRun, type ControllerSummary, average } from "../benchmark";
+import PolicyMeasures from "./PolicyMeasures";
 import DonutBreakdown from "./DonutBreakdown";
 
-import { useMemo } from "react";
-import {
-  ResponsiveContainer, BarChart, Bar, LineChart, Line,
-  CartesianGrid, XAxis, YAxis, Tooltip, Legend
-} from "recharts";
+type Props = { runs: BenchmarkRun[]; speed: number; summaries: ControllerSummary[] };
 
-type Event = {
-  time_s: number;
-  event: string;
-  cell_id: number;
-  target_cell_id: number | null;
-};
+export default function BenchmarkInsights({ runs, speed, summaries }: Props) {
+  const [grouping, setGrouping] = useState<"speed" | "run">("speed");
+  const selected = runs.filter(r => r.speed_kmh === speed);
+  const chartRuns = grouping === "speed" ? runs : selected;
+  const groupKey = grouping === "speed" ? "speed_kmh" : "rng_run";
+  const groups = [...new Set(chartRuns.map(r => r[groupKey]))].sort((a, b) => a - b);
+  const chart = groups.map(group => ({
+    group: grouping === "speed" ? `${group} km/h` : `Run ${group}`,
+    ...Object.fromEntries(summaries.map(({ policy }) => [
+      policy, average(chartRuns.filter(r => r[groupKey] === group && r.controller === policy).map(r => r.throughput_mbps)),
+    ])),
+  }));
+  const throughput = chartRuns.map(r => r.throughput_mbps);
+  const from = throughput.length ? Math.floor((Math.min(...throughput) - 0.005) * 100) / 100 : 0;
+  const to = throughput.length ? Math.ceil((Math.max(...throughput) + 0.005) * 100) / 100 : 1;
 
-type Run = {
-  id: string;
-  controller: string;
-  speed_kmh: number;
-  rng_run: number;
-  throughput_mbps: number;
-  max_excess_gap_ms: number;
-  gaps_over_5ms: number;
-  skipped_sequences: number;
-  ho_successes: number;
-  ho_failures: number;
-  pingpong: number;
-  pingpong_1s: number;
-  events: Event[];
-};
-
-type Props = {
-  runs: Run[];
-  speed: number;
-};
-
-const controllers = ["a3", "rule", "ml"];
-
-const labels: Record<string, string> = {
-  a3: "A3-RSRP",
-  rule: "Rule-based",
-  ml: "Random Forest",
-};
-
-const colors: Record<string, string> = {
-  a3: "#58c9da",
-  rule: "#edae83",
-  ml: "#ae91ee",
-};
-
-const tooltipStyle = {
-  backgroundColor: "#22252b",
-  border: "1px solid #414853",
-  borderRadius: 5,
-  color: "#f1f2f4",
-};
-
-function average(numbers: number[]) {
-  return numbers.length
-    ? numbers.reduce((a, b) => a + b, 0) / numbers.length
-    : 0;
-}
-
-function ChartPanel({
-  title, subtitle, children
-}: {
-  title: string;
-  subtitle: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="panel benchmark-chart-panel">
-      <div className="panel-heading">
-        <div>
-          <h3>{title}</h3>
-          <p>{subtitle}</p>
-        </div>
-      </div>
-      <div className="benchmark-chart-area">
-        {children}
-      </div>
-    </div>
-  );
-}
-
-export default function BenchmarkInsights({ runs, speed }: Props) {
-  const throughputBySpeed = useMemo(
-    () => [30, 120].map(s => {
-      const result: Record<string, number | string> = {
-        speed: `${s} km/h`,
-      };
-
-      controllers.forEach(policy => {
-        const items = runs.filter(
-          r => r.speed_kmh === s && r.controller === policy
-        );
-        result[policy] = average(
-          items.map(r => r.throughput_mbps)
-        );
-      });
-      return result;
-    }),
-    [runs]
-  );
-
-  const diagnostics = useMemo(() => {
-    return controllers.map(policy => {
-      const items = runs.filter(
-        r => r.speed_kmh === speed && r.controller === policy
-      );
-
-      return {
-        name: labels[policy],
-        policy,
-        gaps: average(items.map(r => r.gaps_over_5ms)),
-        skipped: average(items.map(r => r.skipped_sequences)),
-        firstHandover: average(
-          items
-            .map(r => r.events
-              .filter(e => e.event === "HO_SUCCESS")
-              .sort((a, b) => a.time_s - b.time_s)[0]?.time_s
-            )
-            .filter((t): t is number => t !== undefined)
-        ),
-      };
-    });
-  }, [runs, speed]);
-
-  const runComparison = useMemo(() => {
-    const runIds = [...new Set(
-      runs.filter(r => r.speed_kmh === speed)
-        .map(r => r.rng_run)
-    )].sort((a, b) => a - b);
-
-    return runIds.map(runId => {
-      const result: Record<string, number | string> = {
-        run: `Run ${runId}`
-      };
-
-      controllers.forEach(policy => {
-        result[policy] = runs.find(
-          r => r.rng_run === runId &&
-               r.speed_kmh === speed &&
-               r.controller === policy
-        )?.throughput_mbps ?? 0;
-      });
-
-      return result;
-    });
-  }, [runs, speed]);
-
-  return (
-    <div className="benchmark-insights">
-      <div className="section-heading">
-        <h2>Advanced Benchmark Analytics</h2>
-        <span>RECORDED NS-3 DATA</span>
-      </div>
-
-
-      <div className="donut-section">
-        <DonutBreakdown
-          title="Handover Outcomes"
-          subtitle={`Logged results at ${speed} km/h · selected runs`}
-          items={[
-            {
-              name: "Successful",
-              value: runs
-                .filter(r => r.speed_kmh === speed)
-                .reduce((n, r) => n + r.ho_successes, 0),
-              color: "#59d9b6",
-            },
-            {
-              name: "Logged failures",
-              value: runs
-                .filter(r => r.speed_kmh === speed)
-                .reduce((n, r) => n + r.ho_failures, 0),
-              color: "#ed8b84",
-            },
-          ]}
-        />
-      </div>
-
-      <div className="chart-grid">
-        <ChartPanel
-          title="Throughput Across Mobility Speeds"
-          subtitle="Mean throughput · Mbps · ZOOMED Y-axis (3.10–3.30)"
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={throughputBySpeed}>
-              <CartesianGrid stroke="#333943" vertical={false}/>
-              <XAxis dataKey="speed" stroke="#a0a8b4" fontSize={11}/>
-              <YAxis stroke="#a0a8b4" fontSize={11} domain={[3.1, 3.3]} allowDataOverflow={false}/>
-              <Tooltip contentStyle={tooltipStyle}/>
-              <Legend/>
-              {controllers.map(p =>
-                <Bar
-                  key={p}
-                  dataKey={p}
-                  name={labels[p]}
-                  fill={colors[p]}
-                  radius={[3, 3, 0, 0]}
-                />
-              )}
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanel>
-
-        <ChartPanel
-          title={`Excess Reception Gaps · ${speed} km/h`}
-          subtitle="Mean number of gaps over 5 ms per run · lower is better"
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={diagnostics}>
-              <CartesianGrid stroke="#333943" vertical={false}/>
-              <XAxis dataKey="name" stroke="#a0a8b4" fontSize={11}/>
-              <YAxis stroke="#a0a8b4" fontSize={11}/>
-              <Tooltip contentStyle={tooltipStyle}/>
-              <Bar dataKey="gaps" name="Gap events" fill="#ae91ee"/>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanel>
-
-        <ChartPanel
-          title={`Skipped Sequence Diagnostics · ${speed} km/h`}
-          subtitle="Mean skipped sequence numbers per run · not verified packet loss"
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={diagnostics}>
-              <CartesianGrid stroke="#333943" vertical={false}/>
-              <XAxis dataKey="name" stroke="#a0a8b4" fontSize={11}/>
-              <YAxis stroke="#a0a8b4" fontSize={11}/>
-              <Tooltip contentStyle={tooltipStyle}/>
-              <Bar dataKey="skipped" name="Skipped sequences" fill="#edae83"/>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanel>
-
-        <ChartPanel
-          title={`First Completed Handover · ${speed} km/h`}
-          subtitle="Mean first HO_SUCCESS timestamp · seconds · not a quality score"
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={diagnostics}>
-              <CartesianGrid stroke="#333943" vertical={false}/>
-              <XAxis dataKey="name" stroke="#a0a8b4" fontSize={11}/>
-              <YAxis stroke="#a0a8b4" fontSize={11}/>
-              <Tooltip contentStyle={tooltipStyle}/>
-              <Bar
-                dataKey="firstHandover"
-                name="First completion (s)"
-                fill="#58c9da"
-              />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartPanel>
-      </div>
-
-      <div className="panel benchmark-run-panel">
-        <div className="panel-heading">
-          <div>
-            <h3>Run-to-Run Throughput Comparison</h3>
-            <p>
-              Zoomed Y-axis (3.10–3.30 Mbps). Compare runs without relying
-              only on averages
-            </p>
+  return <div className="comparison-stack page-in">
+    <div className="comparison-grid">
+      <PolicyMeasures rows={summaries}/>
+      <section className="surface">
+        <div className="surface-head"><h2><ChartNoAxesCombined size={17}/>Throughput profile</h2>
+          <div className="segmented small" role="group" aria-label="Throughput grouping">
+            <button aria-pressed={grouping === "speed"} onClick={() => setGrouping("speed")}>By speed</button>
+            <button aria-pressed={grouping === "run"} onClick={() => setGrouping("run")}>By run</button>
           </div>
         </div>
-        <div className="benchmark-chart-area">
+        <p className="chart-note">{grouping === "speed" ? "Mean throughput across speeds" : `Recorded throughput at ${speed} km/h`} · Mbps, zoomed scale</p>
+        <div className="chart-area">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={runComparison}>
-              <CartesianGrid stroke="#333943" vertical={false}/>
-              <XAxis dataKey="run" stroke="#a0a8b4" fontSize={11}/>
-              <YAxis stroke="#a0a8b4" fontSize={11} domain={[3.1, 3.3]} allowDataOverflow={false}/>
-              <Tooltip contentStyle={tooltipStyle}/>
-              <Legend/>
-              {controllers.map(p =>
-                <Line
-                  key={p}
-                  dataKey={p}
-                  name={labels[p]}
-                  stroke={colors[p]}
-                  strokeWidth={3}
-                  dot={{ r: 5 }}
-                />
-              )}
+            <LineChart data={chart} margin={{ top: 12, left: -7, right: 28, bottom: 6 }}>
+              <CartesianGrid stroke="#2c3643" vertical={false} strokeDasharray="2 5"/>
+              <XAxis dataKey="group" tickLine={false} axisLine={false} stroke="#a5b2c2" fontSize={12} tickMargin={10} padding={{ left: 22, right: 22 }}/>
+              <YAxis domain={[from, to]} tickFormatter={(n: number) => n.toFixed(2)} tickLine={false} axisLine={false} stroke="#a5b2c2" fontSize={12} width={55}/>
+              <Tooltip contentStyle={{ backgroundColor: "#17212c", border: "1px solid #3c4a59", borderRadius: 8 }}
+                formatter={(value: unknown) => typeof value === "number" ? `${value.toFixed(4)} Mbps` : "—"}/>
+              <Legend iconType="circle" iconSize={7} wrapperStyle={{ fontSize: 12, paddingTop: 10 }}/>
+              {summaries.map(({ policy, controller }) => <Line key={policy} dataKey={policy} name={controller} stroke={policyColors[policy]}
+                isAnimationActive={false} strokeWidth={grouping === "speed" ? 2 : 0}
+                dot={{ r: 4, fill: policyColors[policy] }} activeDot={{ r: 6 }}/>)}
             </LineChart>
           </ResponsiveContainer>
         </div>
-      </div>
-
-      <p className="benchmark-method-note">
-        Methodology: two recorded RNG runs per controller and speed.
-        Reception-gap values are endpoint timing diagnostics.
-        Skipped sequence numbers do not independently establish
-        packet loss. Earlier handover completion is not necessarily
-        better network performance. The RF model remains exploratory.
-      </p>
+      </section>
     </div>
-  );
+    <section className="surface">
+      <div className="surface-head"><h2><Table2 size={17}/>Controller comparison</h2><span className="count-tag">{selected.length} runs</span></div>
+      <div className="table-scroll"><table className="numeric-table"><thead><tr>
+        <th>Controller</th><th>Throughput (Mbps)</th><th>Max excess gap (ms)</th><th>Successful HOs</th><th>Logged failures</th><th>Ping-pong</th><th>Skipped seq.</th>
+      </tr></thead><tbody>{summaries.map(r => <tr key={r.policy}>
+        <td><i className="policy-dot" style={{ background: policyColors[r.policy] }}/>{r.controller}</td>
+        <td>{r.throughput.toFixed(4)}</td><td>{r.gap.toFixed(1)}</td><td>{r.successes}</td><td>{r.failures}</td><td>{r.pingpong}</td><td>{r.skipped}</td>
+      </tr>)}</tbody></table></div>
+      <p className="panel-footnote">Throughput and maximum excess gap are means per run. Event and sequence columns are totals. Skipped sequences are a reception diagnostic.</p>
+    </section>
+    <DonutBreakdown title="Handover outcomes" subtitle={`Logged events at ${speed} km/h across the selected runs`}
+      items={[
+        { name: "Completed", value: summaries.reduce((n, r) => n + r.successes, 0), color: "#65dcd2" },
+        { name: "Logged failures", value: summaries.reduce((n, r) => n + r.failures, 0), color: "#ef9c95" },
+      ]}/>
+  </div>;
 }
