@@ -71,7 +71,7 @@ export default function ModelEvaluation() {
   const [request, setRequest] = useState(0);
   useEffect(() => {
     const abort = new AbortController();
-    fetch(`${import.meta.env.BASE_URL}model_evaluation.json`, { signal: abort.signal })
+    fetch(`${import.meta.env.VITE_API_BASE_URL ?? "http://127.0.0.1:8000"}/api/model-evaluation`, { signal: abort.signal })
       .then(response => {
         if (!response.ok) throw new Error(`Report returned HTTP ${response.status}.`);
         return response.json() as Promise<ModelReport>;

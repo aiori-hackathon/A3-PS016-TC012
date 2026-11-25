@@ -19,6 +19,7 @@ export type TopologyNode = "ue" | "host" | "epc" | number;
 export type FlowMode = "both" | "dl" | "ul" | "off";
 
 export const controllerName: Record<string, string> = {
+  xgboost: "XGBoost", logistic: "Logistic Regression",
   a3: "A3-RSRP", ml: "Random Forest", rule: "Rule-based",
 };
 

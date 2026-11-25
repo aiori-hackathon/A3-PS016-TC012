@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from backend.simulation_jobs import router as simulation_router
+from backend.simulation_jobs import PROGRAMS, router as simulation_router
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -63,12 +63,22 @@ def rf_decisions():
     return read_json("rf_decisions.json")
 
 
+@app.get("/api/model-evaluation")
+def model_evaluation():
+    return read_json("model_evaluation.json")
+
+
+@app.get("/api/handover-prototypes")
+def handover_prototypes():
+    return read_json("handover-prototypes.json")
+
+
 @app.get("/api/scenarios")
 def scenarios():
     data = read_json("benchmark.json")
 
     return {
-        "controllers": ["a3", "rule", "ml"],
+        "controllers": list(PROGRAMS),
         "speeds_kmh": [30, 120],
         "runs": sorted({
             item["rng_run"]

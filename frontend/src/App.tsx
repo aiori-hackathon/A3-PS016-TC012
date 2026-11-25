@@ -28,7 +28,7 @@ export default function App() {
 
   useEffect(() => {
     const abort = new AbortController();
-    loadRecordedData<Benchmark>(`${import.meta.env.BASE_URL}benchmark.json`, abort.signal, api ? `${api}/api/benchmark` : undefined)
+    loadRecordedData<Benchmark>(`${api ?? "http://127.0.0.1:8000"}/api/benchmark`, abort.signal)
       .then(({ data: benchmark, source }) => {
         setData(benchmark);
         setApiConnected(source === "api");
@@ -81,6 +81,12 @@ export default function App() {
       <div className="content">
         <div className="page-heading" key={page.id}>
           <div><h1>{page.title}</h1><p>{page.description}</p></div>
+          {page.id === "overview" &&
+            <button type="button" className="primary-action"
+              onClick={() => navigate("model-evaluation")}>
+              XGBoost / Logistic Regression
+            </button>}
+
           {(page.id === "overview" || page.id === "comparison") &&
             <button className="primary-action export-button" disabled={!filtered.length} onClick={() => exportComparison(summaries, speed, rng)}>
               <Download size={15}/>Export CSV
